@@ -1,0 +1,79 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{language=C,
+  numbers=left,
+  stepnumber=1,    
+  firstnumber=1,
+  numberfirstline=true
+  aboveskip=5mm,
+  belowskip=5mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true
+  tabsize=3
+}
+
+\title{Artificial Intelligence 1 \\ Lab 1}%Update the lab (assignment number)
+\author{Name1 (student number 1) \& Name2 (student number 2) \\ Group name} %Change the names and fill in the student numbers and the group name (AI1/AI2/CS1 etc)
+\date{day-month-year}%Update the date
+
+\begin{document}
+
+\maketitle
+
+\section*{Theory}
+\subsection*{Exercise 1}
+%Your answers for the theoretical questions go here
+
+\subsection*{Exercise 2}
+%Your answers for the theoretical questions go here
+
+\subsection*{Exercise 3}
+\begin{enumerate}
+\item The program finds a path from 0 to 99 and from 0 to 102, using BFS. The found paths are respectively 28091 nodes and 29325 nodes. The program also finds a path from 1 to 0, using DFS. This path has a length of 2 nodes. The other paths are not found, for these the program returns a fatal error, because it does not have enough memory. 
+
+\item BFS uses a lot of memory, therefore the solution to why it did not work, is to increase the allocated memory.  We multiplied it by a factor of 10. The DFS problem is solved, by making sure that the program does not continuously add 0's and 1's to the end of the stack, because that would mean that all new states would also use 0. The way to solve this, is by making sure that the multiplication uses values bigger than 0, and division only uses values other than 0 and 1.
+
+\end{enumerate}
+\section*{Programming} 
+\subsection*{Program description}
+
+\subsection*{Problem analysis}
+
+
+\subsection*{Program design}
+
+
+\subsection*{Program evaluation}
+
+
+\subsection*{Program output}
+
+
+\subsection*{Program files}
+%copy code files into listings using the \begin{listing} command as follows:
+\subsubsection*{Main.c}
+\begin{lstlisting}
+Your code here
+\end{lstlisting}
+
+\subsubsection*{SomeFile.c}
+\begin{lstlisting}
+Some other code here
+\end{lstlisting}
+
+\end{document}
