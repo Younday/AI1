@@ -28,15 +28,12 @@ void doubleHeapSize(Heap *hp){
     hp->size=newSize;
 }
 
-void enqueue(int x,int y,int g, int f, Heap *hp){
+void enqueue(State s, Heap *hp){
   int fr = hp->front;
   if (fr == hp-> size){
     doubleHeapSize(hp);
   }
-  hp->array[fr].x = x;
-  hp->array[fr].y = y;
-  hp->array[fr].g = g;
-  hp->array[fr].f = f;
+  hp->array[fr] = s;
   upHeap(hp,fr);
   hp->front=fr+1;
 }

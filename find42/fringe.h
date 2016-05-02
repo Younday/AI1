@@ -23,16 +23,28 @@ typedef struct Fringe {
   int maxSize;   /* maximum size of the fringe during search         */
 } Fringe;
 
+void enqueue(Fringe *fringe, State s);
+
+State removeMin(Fringe *fringe);
+
+void downheap(Fringe *fringe, int n);
+
+void upHeap(Fringe *fringe, int n);
+
+void doubleHeapSize(Fringe *fringe);
+
+void swap (State *pa, State *pb);
+
 Fringe makeFringe(int mode);
-/* Returns an empty fringe. 
- * The mode can be LIFO(=STACK), FIFO, or PRIO(=HEAP) 
+/* Returns an empty fringe.
+ * The mode can be LIFO(=STACK), FIFO, or PRIO(=HEAP)
  */
 
 void deallocFringe(Fringe fringe);
 /* Frees the memory allocated for the fringe */
 
 int getFringeSize(Fringe fringe);
-/* Returns the number of elements in the fringe 
+/* Returns the number of elements in the fringe
  */
 
 int isEmptyFringe(Fringe fringe);
@@ -44,7 +56,7 @@ Fringe insertFringe(Fringe fringe, State s, ...);
  */
 
 Fringe removeFringe(Fringe fringe, State *s);
-/* Removes an element from the fringe, and returns it in s. 
+/* Removes an element from the fringe, and returns it in s.
  * Moreover, the new fringe is returned.
  */
 

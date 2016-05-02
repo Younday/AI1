@@ -4,8 +4,7 @@
 
 typedef struct State {
   int x,y;
-  int f,g,h;
-  int formerstate;
+  int f,g;
 } State;
 
 typedef struct Heap {
@@ -19,7 +18,7 @@ void doubleHeapSize(Heap *hp);
 Heap makeHeap ();
 int isEmptyHeap (Heap h);
 void heapEmptyError ();
-void enqueue(int x,int y,int g, int f, Heap *hp);
+void enqueue(State s, Heap *hp);
 State removeMin(Heap *hp);
 void downheap(Heap *hp, int n);
 void upHeap(Heap *hp, int n);

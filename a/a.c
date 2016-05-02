@@ -14,20 +14,16 @@ int isValidLocation(int x, int y) {
 }
 
 
-int realDistance (int travelled){
-  travelled = travelled + 3;
-  return travelled;
-}
-
 int heuristic1(int x, int y, int goalX, int goalY) {
   int distance = sqrt(pow((goalX-x),2) + pow((goalY-y),2));
-  return distance;
+  return distance/3;
 }
 
 int heuristic2(int x, int y, int goalX, int goalY) {
   int distance = abs(goalX-x) + abs(goalY-y);
-  return distance;
+  return distance/3;
 }
+
 
 int search (int x, int y, int goalX, int goalY, int cost, Heap hp) {
   State state;
@@ -42,18 +38,16 @@ int search (int x, int y, int goalX, int goalY, int cost, Heap hp) {
         state.x = newX;
         state.y = newY;
         printf("coordinates %d,%d\n", state.x,state.y);
-        state.g = realDistance(cost);
+        state.g = cost++;
         h = heuristic1(state.x, state.y, goalX, goalY);
         state.f = state.g + h;
-        /*printf("VALUE H: %d\n", h);
-        printf("VALUE F: %d\n", state.f);
-        printf("VALUE G: %d\n", state.g);*/
         if (state.x == goalX && state.y == goalY) {
           printf("#visited states: %d\n", visited);
           free(hp.array);
-          return state.g/3;
+          return state.g;
+        } else {
+        enqueue(state, &hp);
         }
-        enqueue(state.x, state.y, state.g, state.f, &hp);
       }
     }
     state = removeMin(&hp);

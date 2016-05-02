@@ -8,9 +8,11 @@
  *       contain pointers!
  */
 
-typedef struct {
+typedef struct State {
   int value;
-  int prev;
+  int index;
+  int length;
+  int cost;
 } State;
 
 #endif
