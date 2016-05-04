@@ -175,7 +175,50 @@ void randomSearch() {
 /*************************************************************/
 
 void hillClimbing() {
-  printf("Implement the routine hillClimbing() yourself!!\n");
+  int ev, ev1, ev2;
+  int queen, iter = 0;
+  int optimum = (nqueens-1)*nqueens/2;
+
+  while ((ev = evaluateState()) != optimum) {
+
+    printf("iteration %d: evaluation=%d\n", iter++, ev);
+    if (iter == MAXITER) break;  /* give up */
+    /* generate a (new) random state: for each queen do ...*/
+    for (queen=0; queen < nqueens; queen++) {
+      ev1 = 0;
+      ev2 = 0;
+      int pos, newpos1, newpos2;
+      /* position (=column) of queen */
+      pos = columnOfQueen(queen);
+      /* change in random new location */
+      if(canMoveTo(queen, pos+1)) {
+        newpos1 = pos+1;
+        moveQueen(queen, newpos1);
+        ev1 = evaluateState();
+        moveQueen(queen, pos);
+      }
+      if(canMoveTo(queen, pos-1)) {
+        newpos2 = pos-1;
+        moveQueen(queen, newpos2);
+        ev2 = evaluateState();
+        moveQueen(queen, pos);
+      }
+      if(ev < ev1 && ev1 > ev2) {
+        moveQueen(queen, newpos1);
+      }
+      else if(ev < ev2 && ev2 > ev1) {
+        moveQueen(queen, newpos2);
+      }
+      else if(ev1 == ev2) {
+        moveQueen(queen, newpos2);
+      }
+    }
+  }
+  if (iter < MAXITER) {
+    printf ("Solved puzzle. ");
+  }
+  printf ("Final state is");
+  printState();
 }
 
 /*************************************************************/
