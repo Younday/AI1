@@ -187,7 +187,7 @@ void hillClimbing() {
     for (queen=0; queen < nqueens; queen++) {
       ev1 = 0;
       ev2 = 0;
-      int pos, newpos1, newpos2;
+      int pos, newpos, newpos1, newpos2;
       /* position (=column) of queen */
       pos = columnOfQueen(queen);
       /* change in random new location */
@@ -221,18 +221,8 @@ void hillClimbing() {
             break;
         }
       }
-    }
-
-    if (ev == ev1 && ev1 == ev2) {
-      for (queen=0; queen < nqueens; queen++) {
-        int pos, newpos;
-        /* position (=column) of queen */
-        pos = columnOfQueen(queen);
-        /* change in random new location */
-        newpos = pos;
-        while (newpos == pos) {
-          newpos = random() % nqueens;
-        }
+      else if(ev == ev1 && ev == ev2) {
+        newpos = random() % nqueens;
         moveQueen(queen, newpos);
       }
     }
