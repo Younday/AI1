@@ -210,7 +210,29 @@ void hillClimbing() {
         moveQueen(queen, newpos2);
       }
       else if(ev1 == ev2) {
-        moveQueen(queen, newpos2);
+        int i;
+        i = 0 + random() % (1-0);
+        switch (i) {
+          case 0:
+            moveQueen(queen,newpos1);
+            break;
+          case 1:
+            moveQueen(queen,newpos2);
+            break;
+        }
+      }
+      if (ev == ev1 && ev1 == ev2) {
+        for (queen=0; queen < nqueens; queen++) {
+          int pos, newpos;
+          /* position (=column) of queen */
+          pos = columnOfQueen(queen);
+          /* change in random new location */
+          newpos = pos;
+          while (newpos == pos) {
+            newpos = random() % nqueens;
+          }
+          moveQueen(queen, newpos);
+        }
       }
     }
   }
