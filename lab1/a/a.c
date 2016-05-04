@@ -37,7 +37,6 @@ int search (int x, int y, int goalX, int goalY, int cost, Heap hp) {
         visited++;
         state.x = newX;
         state.y = newY;
-        printf("coordinates %d,%d\n", state.x,state.y);
         state.g = cost++;
         h = heuristic1(state.x, state.y, goalX, goalY);
         state.f = state.g + h;
