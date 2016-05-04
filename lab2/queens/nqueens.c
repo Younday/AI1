@@ -221,18 +221,19 @@ void hillClimbing() {
             break;
         }
       }
-      if (ev == ev1 && ev1 == ev2) {
-        for (queen=0; queen < nqueens; queen++) {
-          int pos, newpos;
-          /* position (=column) of queen */
-          pos = columnOfQueen(queen);
-          /* change in random new location */
-          newpos = pos;
-          while (newpos == pos) {
-            newpos = random() % nqueens;
-          }
-          moveQueen(queen, newpos);
+    }
+
+    if (ev == ev1 && ev1 == ev2) {
+      for (queen=0; queen < nqueens; queen++) {
+        int pos, newpos;
+        /* position (=column) of queen */
+        pos = columnOfQueen(queen);
+        /* change in random new location */
+        newpos = pos;
+        while (newpos == pos) {
+          newpos = random() % nqueens;
         }
+        moveQueen(queen, newpos);
       }
     }
   }
