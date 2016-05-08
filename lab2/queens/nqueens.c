@@ -297,6 +297,38 @@ void simulatedAnnealing() {
   printState();
 }
 
+void geneticAlgorithm() {
+  /*
+  First: randomSearch
+  Fitness: number of correct queens (evaluateState)
+  Cross-over: pick a random queen n, then the positions of the queens after n of 1 parent
+  and in front of n of the other parent
+  Mutation: Swap two queens
+  Throw away lowest fitness
+  */
+
+  int queen, iter = 0;
+  int optimum = (nqueens-1)*nqueens/2;
+
+  while (evaluateState() != optimum) {
+    while (iter <= 100) {
+      for (queen=0; queen < nqueens; queen++) {
+        int pos, newpos;
+        /* position (=column) of queen */
+        pos = columnOfQueen(queen);
+        /* change in random new location */
+        newpos = pos;
+        while (newpos == pos) {
+          newpos = random() % nqueens;
+        }
+        moveQueen(queen, newpos);
+      }
+    }
+
+  }
+  printState();
+}
+
 
 
 int main(int argc, char *argv[]) {
@@ -309,9 +341,9 @@ int main(int argc, char *argv[]) {
 
   do {
     printf ("Algorithm: (1) Random search  (2) Hill climbing  ");
-    printf ("(3) Simulated Annealing: ");
+    printf ("(3) Simulated Annealing  (4) Genetic algorithm: ");
     scanf ("%d", &algorithm);
-  } while ((algorithm < 1) || (algorithm > 3));
+  } while ((algorithm < 1) || (algorithm > 4));
 
   initializeRandomGenerator();
 
@@ -324,6 +356,7 @@ int main(int argc, char *argv[]) {
   case 1: randomSearch();       break;
   case 2: hillClimbing();       break;
   case 3: simulatedAnnealing(); break;
+  case 4: geneticAlgorithm();   break;
   }
 
   return 0;
