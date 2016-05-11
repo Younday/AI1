@@ -181,58 +181,30 @@ void randomSearch() {
 /*************************************************************/
 
 void hillClimbing() {
-  int ev, ev1, ev2;
+  int newqueen, newpos, pos;
   int queen, iter = 0;
   int optimum = (nqueens-1)*nqueens/2;
+  int max = 0;
+  int i;
 
-  while ((ev = evaluateState()) != optimum) {
+  while ((evaluateState()) != optimum) {
 
-    printf("iteration %d: evaluation=%d\n", iter++, ev);
+    printf("iteration %d: evaluation=%d\n", iter++, evaluateState());
     if (iter == MAXITER) break;  /* give up */
     /* generate a (new) random state: for each queen do ...*/
-    if (ev == optimum) break;
     for (queen=0; queen < nqueens; queen++) {
-      ev1 = 0;
-      ev2 = 0;
-      int pos, newpos, newpos1, newpos2;
-      /* position (=column) of queen */
       pos = columnOfQueen(queen);
-      /* change in random new location */
-      if(canMoveTo(queen, pos+1)) {
-        newpos1 = pos+1;
-        moveQueen(queen, newpos1);
-        ev1 = evaluateState();
-        moveQueen(queen, pos);
-      }
-      if(canMoveTo(queen, pos-1)) {
-        newpos2 = pos-1;
-        moveQueen(queen, newpos2);
-        ev2 = evaluateState();
-        moveQueen(queen, pos);
-      }
-      if(ev < ev1 && ev1 > ev2) {
-        moveQueen(queen, newpos1);
-      }
-      else if(ev < ev2 && ev2 > ev1) {
-        moveQueen(queen, newpos2);
-      }
-      else if(ev1 == ev2) {
-        int i;
-        i = selectRandom(1);
-        switch (i) {
-          case 0:
-            moveQueen(queen,newpos1);
-            break;
-          case 1:
-            moveQueen(queen,newpos2);
-            break;
+      for(i = 0; i < nqueens; i++) {
+        moveQueen(queen, i);
+        if(evaluateState() > max) {
+          newpos = i;
+          max = evaluateState();
+          newqueen = queen;
         }
       }
-      else if(ev == ev1 && ev == ev2) {
-        newpos = random() % nqueens;
-        moveQueen(queen, newpos);
-      }
+      moveQueen(queen, pos);
     }
+    moveQueen(newqueen, newpos);
   }
   if (iter < MAXITER) {
     printf ("Solved puzzle. ");
@@ -240,6 +212,7 @@ void hillClimbing() {
   printf ("Final state is");
   printState();
 }
+
 
 /*************************************************************/
 
