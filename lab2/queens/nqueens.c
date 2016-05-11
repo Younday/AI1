@@ -204,8 +204,8 @@ void hillClimbing() {
       }
       moveQueen(queen, pos);
     }
-    moveQueen(newqueen, newpos);
-  }
+    moveQueen(newqueen,newpos);
+}
   if (iter < MAXITER) {
     printf ("Solved puzzle. ");
   }
@@ -272,7 +272,7 @@ void simulatedAnnealing() {
 
 void geneticAlgorithm() {
   /*
-  First: randomSearch
+  First: 
   Fitness: number of correct queens (evaluateState)
   Cross-over: pick a random queen n, then the positions of the queens after n of 1 parent
   and in front of n of the other parent
@@ -280,26 +280,11 @@ void geneticAlgorithm() {
   Throw away lowest fitness
   */
 
-  int queen, iter = 0;
   int optimum = (nqueens-1)*nqueens/2;
 
-  while (evaluateState() != optimum) {
-    while (iter <= 100) {
-      for (queen=0; queen < nqueens; queen++) {
-        int pos, newpos;
-        /* position (=column) of queen */
-        pos = columnOfQueen(queen);
-        /* change in random new location */
-        newpos = pos;
-        while (newpos == pos) {
-          newpos = random() % nqueens;
-        }
-        moveQueen(queen, newpos);
-      }
-    }
 
-  }
-  printState();
+
+ 
 }
 
 
