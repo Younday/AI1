@@ -72,12 +72,13 @@ int minimaxDecision(int state, int turn) {
 
 int negaMax(int state) {
   int move, bestmove, best = -INFINITY;
+  int m;
   if (state == 1) {
-    return 1;
+    return -1;
   }
   for (move = 1; move <= 3; move++) {
     if (state - move > 0) {
-      int m =  -negaMax(state - move);
+      m =  -negaMax(state - move);
       if (m > best) {
         best = m;
         bestmove = move;
@@ -93,8 +94,6 @@ void playNim(int state) {
   int turn = 0;
   while (state != 1) {
     int action = negaMax(state);
-    /*
-    int action = minimaxDecision(state, turn);*/
     printf("%d: %s takes %d\n", state,
            (turn==MAX ? "Max" : "Min"), action);
     state = state - action;
