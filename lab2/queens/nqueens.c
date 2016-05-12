@@ -188,7 +188,6 @@ void hillClimbing() {
   int i;
 
   while ((evaluateState()) != optimum) {
-
     printf("iteration %d: evaluation=%d\n", iter++, evaluateState());
     if (iter == MAXITER) break;  /* give up */
     /* generate a (new) random state: for each queen do ...*/
@@ -199,6 +198,18 @@ void hillClimbing() {
         if(evaluateState() > max) {
           newpos = i;
           max = evaluateState();
+          newqueen = queen;
+        }
+        if (evaluateState() == max) {
+          int x = 0 + random() % (1 - 0);
+          switch (x) {
+            case 0:
+              newpos = i;
+              break;
+            case 1:
+              newpos = pos;
+              break;
+          }
           newqueen = queen;
         }
       }
@@ -254,9 +265,9 @@ void simulatedAnnealing() {
           newqueen = queen;
         }
         dE = max - current;
-        if(dE < 0) {
+        if(dE == 0) {
           if(ExpMove(dE, iter)) {
-            newpos = random() % nqueens;;
+            newpos = random() % nqueens;
           }
         }
       }
@@ -273,7 +284,7 @@ void simulatedAnnealing() {
 
 void geneticAlgorithm() {
   /*
-  First: 
+  First:
   Fitness: number of correct queens (evaluateState)
   Cross-over: pick a random queen n, then the positions of the queens after n of 1 parent
   and in front of n of the other parent
@@ -285,7 +296,7 @@ void geneticAlgorithm() {
 
 
 
- 
+
 }
 
 
