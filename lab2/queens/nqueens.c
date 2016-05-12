@@ -216,52 +216,53 @@ void hillClimbing() {
 
 /*************************************************************/
 
-void simulatedAnnealing() {
-  int ev, ev1, ev2;
-  int queen, iter = 0;
-  double temperature = pow(nqueens, 2), epsilon= 0.000001;
-  double alpha = 0.999;
-  int optimum = (nqueens-1)*nqueens/2;
+int ExpMove(int dE, int iter) {
+  int random1;
+  float E;
+  E = exp((dE/iter)/nqueens*nqueens) * 100;
+  random1 = random() % 100;
+  if(E > random1) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
 
-  while (temperature > epsilon) {
+void simulatedAnnealing() {
+  int dE, newqueen, ev;
+  int queen, iter = 0, i;
+  int optimum = (nqueens-1)*nqueens/2;
+  int max = 0, current;
+
+  while (evaluateState() != optimum) {
     ev = evaluateState();
     printf("iteration %d: evaluation=%d\n", iter++, ev);
-
     if(iter == MAXITER) break;
+    int newpos;
     for (queen=0; queen < nqueens; queen++) {
-      ev1 = 0;
-      ev2 = 0;
-      int pos, newpos1, newpos2;
+      int pos;
       /* position (=column) of queen */
       pos = columnOfQueen(queen);
       /* change in random new location */
-      if(canMoveTo(queen, pos+1)) {
-        newpos1 = pos+1;
-        moveQueen(queen, newpos1);
-        ev1 = evaluateState();
-        moveQueen(queen, pos);
+      for(i = 0; i < nqueens; i++) {
+        moveQueen(queen, i);
+        current = evaluateState();
+        if(current > max) {
+          newpos = i;
+          max = evaluateState();
+          newqueen = queen;
+        }
+        dE = max - current;
+        if(dE < 0) {
+          if(ExpMove(dE, iter)) {
+            newpos = random() % nqueens;;
+          }
+        }
       }
-      if(canMoveTo(queen, pos-1)) {
-        newpos2 = pos-1;
-        moveQueen(queen, newpos2);
-        ev2 = evaluateState();
-        moveQueen(queen, pos);
-      }
-
-      if(ev1 - ev > 0) {
-        moveQueen(queen, newpos1);
-      }
-      else if(ev2 - ev > 0){
-        moveQueen(queen, newpos2);
-      }
-      else {
-        double ev3 = ev1 - ev;
-        double ev4 = ev2 - ev;
-        int move = exp(ev3/temperature) > exp(ev4/temperature) ? newpos1 : newpos2;
-        moveQueen(queen, move);
-      }
-      temperature *= alpha;
+      moveQueen(queen, pos);
     }
+    moveQueen(newqueen, newpos);
   }
   if (optimum == ev) {
     printf ("Solved puzzle. ");
