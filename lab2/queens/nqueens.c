@@ -196,12 +196,14 @@ void hillClimbing() {
       for(i = 0; i < nqueens; i++) {
         moveQueen(queen, i);
         if(evaluateState() > max) {
+
           newpos = i;
           max = evaluateState();
           newqueen = queen;
         }
-        if (evaluateState() == max) {
-          int x = 0 + random() % (1 - 0);
+        else if (evaluateState() == max) {
+          int x = random() % 2;
+          printf("%d\n", x);
           switch (x) {
             case 0:
               newpos = i;
@@ -230,7 +232,7 @@ void hillClimbing() {
 int ExpMove(int dE, int iter) {
   int random1;
   float E;
-  E = exp((dE/iter)/nqueens*nqueens) * 100;
+  E = exp((dE/iter)/(nqueens*nqueens)) * 100;
   random1 = random() % 100;
   if(E > random1) {
     return 1;
@@ -244,7 +246,7 @@ void simulatedAnnealing() {
   int dE, newqueen, ev;
   int queen, iter = 0, i;
   int optimum = (nqueens-1)*nqueens/2;
-  int max = 0, current;
+  int max = 0, current, next;
 
   while (evaluateState() != optimum) {
     ev = evaluateState();
@@ -257,25 +259,24 @@ void simulatedAnnealing() {
       pos = columnOfQueen(queen);
       /* change in random new location */
       for(i = 0; i < nqueens; i++) {
-        moveQueen(queen, i);
         current = evaluateState();
+        moveQueen(queen, i);
+        next = evaluateState();
         if(current > max) {
           newpos = i;
           max = evaluateState();
           newqueen = queen;
         }
         dE = max - current;
-        if(dE == 0) {
-          if(ExpMove(dE, iter)) {
-            newpos = random() % nqueens;
-          }
+        if(ExpMove(dE, iter)) {
+          newpos = random() % nqueens;
         }
       }
       moveQueen(queen, pos);
     }
     moveQueen(newqueen, newpos);
   }
-  if (optimum == ev) {
+  if (iter < MAXITER) {
     printf ("Solved puzzle. ");
   }
   printf ("Final state is");
