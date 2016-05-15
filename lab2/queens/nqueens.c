@@ -197,11 +197,11 @@ void hillClimbing() {
       for(i = 0; i < nqueens; i++) {
         moveQueen(queen, i);
         if(evaluateState() > max) {
-
           newpos = i;
           max = evaluateState();
           newqueen = queen;
         }
+<<<<<<< HEAD
 
         else if (evaluateState() == max) {
           int x = random() % 2;
@@ -210,6 +210,10 @@ void hillClimbing() {
         if (evaluateState() == max) {
           int x = random() % 2;
 
+=======
+        if (evaluateState() == max) {
+          int x = random() % 2;
+>>>>>>> 3c7164ae00a187d05e0245f2d3263f6dbc55bc53
           switch (x) {
             case 0:
               newpos = i;
@@ -239,7 +243,7 @@ void hillClimbing() {
 int ExpMove(int dE, int iter) {
   int random1;
   float E;
-  E = exp((dE/iter)/(nqueens*nqueens)) * 100;
+  E = exp((dE/iter)/nqueens*nqueens) * 100;
   random1 = random() % 100;
   if(E > random1) {
     return 1;
@@ -266,29 +270,38 @@ void simulatedAnnealing() {
       pos = columnOfQueen(queen);
       /* change in random new location */
       for(i = 0; i < nqueens; i++) {
-        current = evaluateState();
         moveQueen(queen, i);
+<<<<<<< HEAD
+=======
+        current = evaluateState();
+>>>>>>> 3c7164ae00a187d05e0245f2d3263f6dbc55bc53
         if(current > max) {
           newpos = i;
           max = evaluateState();
           newqueen = queen;
         }
         dE = max - current;
+<<<<<<< HEAD
         if(ExpMove(dE, iter)) {
           newpos = random() % nqueens;
 
+=======
+>>>>>>> 3c7164ae00a187d05e0245f2d3263f6dbc55bc53
         if(dE < 0) {
           if(ExpMove(dE, iter)) {
             newpos = random() % nqueens;
           }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3c7164ae00a187d05e0245f2d3263f6dbc55bc53
         }
       }
       moveQueen(queen, pos);
     }
     moveQueen(newqueen, newpos);
   }
-  if (iter < MAXITER) {
+  if (optimum == ev) {
     printf ("Solved puzzle. ");
   }
   printf ("Final state is");
@@ -314,9 +327,9 @@ void sortPopulation (int size, int **arr) {
   int i, n, value;
  // Population is sorted on the evaluated stated, which is stored in the last position of the array.
   for (i = 1; i < size; i++) {
-    value = arr[i][nqueens+1];
+    value = arr[i][nqueens];
     n = i;
-    while ((n > 0) && (arr[n-1][nqueens+1] > value)) {
+    while ((n > 0) && (arr[n-1][nqueens] > value)) {
       arr[n] = arr[n-1];
       n--;
     }
@@ -329,10 +342,10 @@ void geneticAlgorithm() {
 
   int optimum = (nqueens-1)*nqueens/2;
   int m;
-  int i, n;
+  int i, n, q;
   int **arr;
   int generation = 0;
-  int size = 10*nqueens;
+  int size = pow(2,nqueens);
 
   arr = malloc(size*sizeof(int *));
   assert(arr != NULL);
@@ -340,8 +353,10 @@ void geneticAlgorithm() {
   for(i = 0; i < size; i++) {
   	arr[i] = malloc((nqueens+1)*sizeof(int));
   	assert(arr[i] != NULL);
-    initiateQueens(1);
-    arr [i][nqueens+1] = evaluateState();
+    for (q = 0; q < nqueens; q++) {
+      arr[i][q] = random() %nqueens;
+    }
+    arr [i][nqueens] = evaluateState();
     }
     sortPopulation(size, arr);
 
@@ -357,12 +372,12 @@ and in front of n of the other parent */
         // the worst population members are hereby deleted
         arr [size-1][n]  = arr[i][n];
         arr [size-1][nqueens-n] = arr[i+1][nqueens-n];
-        // random mutation occurs 1% of the time
+        // random mutation occurs 4% of the time
         m = random() % 100;
-        if (m < 2) {
+        if (m < 5) {
           mutation();
         }
-        arr[size-1][nqueens+1] = evaluateState();
+        arr[size-1][nqueens] = evaluateState();
         sortPopulation(size, arr);
       }
     }
