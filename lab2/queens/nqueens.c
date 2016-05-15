@@ -151,7 +151,7 @@ int selectRandom(int n) {
 /*************************************************************/
 
 /* A very silly random search 'algorithm' */
-#define MAXITER 1000
+#define MAXITER 100000
 void randomSearch() {
   int queen, iter = 0;
   int optimum = (nqueens-1)*nqueens/2;
@@ -186,7 +186,7 @@ void hillClimbing() {
   int queen, iter = 0;
   int optimum = (nqueens-1)*nqueens/2;
   int max = 0;
-  int i;
+  int i, x;
 
   while ((evaluateState()) != optimum) {
     printf("iteration %d: evaluation=%d\n", iter++, evaluateState());
@@ -201,19 +201,10 @@ void hillClimbing() {
           max = evaluateState();
           newqueen = queen;
         }
-<<<<<<< HEAD
-
         else if (evaluateState() == max) {
-          int x = random() % 2;
+          x = random() % 2;
           printf("%d\n", x);
-
-        if (evaluateState() == max) {
-          int x = random() % 2;
-
-=======
-        if (evaluateState() == max) {
-          int x = random() % 2;
->>>>>>> 3c7164ae00a187d05e0245f2d3263f6dbc55bc53
+        }
           switch (x) {
             case 0:
               newpos = i;
@@ -224,7 +215,6 @@ void hillClimbing() {
           }
           newqueen = queen;
         }
-      }
       moveQueen(queen, pos);
     }
     moveQueen(newqueen,newpos);
@@ -235,7 +225,7 @@ void hillClimbing() {
   printf ("Final state is");
   printState();
 }
-}
+
 
 
 /*************************************************************/
@@ -244,7 +234,7 @@ int ExpMove(int dE, int iter) {
   int random1;
   float E;
   E = exp((dE/iter)/nqueens*nqueens) * 100;
-  random1 = random() % 100;
+  random1 = random() % 101;
   if(E > random1) {
     return 1;
   }
@@ -263,6 +253,7 @@ void simulatedAnnealing() {
     ev = evaluateState();
     printf("iteration %d: evaluation=%d\n", iter++, ev);
     if(iter == MAXITER) break;
+
     int newpos;
     for (queen=0; queen < nqueens; queen++) {
       int pos;
@@ -271,31 +262,22 @@ void simulatedAnnealing() {
       /* change in random new location */
       for(i = 0; i < nqueens; i++) {
         moveQueen(queen, i);
-<<<<<<< HEAD
-=======
         current = evaluateState();
->>>>>>> 3c7164ae00a187d05e0245f2d3263f6dbc55bc53
         if(current > max) {
           newpos = i;
           max = evaluateState();
           newqueen = queen;
         }
         dE = max - current;
-<<<<<<< HEAD
         if(ExpMove(dE, iter)) {
           newpos = random() % nqueens;
-
-=======
->>>>>>> 3c7164ae00a187d05e0245f2d3263f6dbc55bc53
+        }
         if(dE < 0) {
           if(ExpMove(dE, iter)) {
             newpos = random() % nqueens;
           }
-<<<<<<< HEAD
-
-=======
->>>>>>> 3c7164ae00a187d05e0245f2d3263f6dbc55bc53
         }
+
       }
       moveQueen(queen, pos);
     }
@@ -307,7 +289,7 @@ void simulatedAnnealing() {
   printf ("Final state is");
   printState();
 }
-}
+
 
 /*************************************************************/
 
