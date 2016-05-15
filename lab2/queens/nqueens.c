@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <assert.h>
 
 #define MAXQ 100
 
@@ -201,7 +202,7 @@ void hillClimbing() {
           newqueen = queen;
         }
         if (evaluateState() == max) {
-          int x = 0 + random() % (1 - 0);
+          int x = random() % 2;
           switch (x) {
             case 0:
               newpos = i;
@@ -265,7 +266,7 @@ void simulatedAnnealing() {
           newqueen = queen;
         }
         dE = max - current;
-        if(dE == 0) {
+        if(dE < 0) {
           if(ExpMove(dE, iter)) {
             newpos = random() % nqueens;
           }
@@ -282,23 +283,90 @@ void simulatedAnnealing() {
   printState();
 }
 
-void geneticAlgorithm() {
-  /*
-  First:
-  Fitness: number of correct queens (evaluateState)
-  Cross-over: pick a random queen n, then the positions of the queens after n of 1 parent
-  and in front of n of the other parent
-  Mutation: Swap two queens
-  Throw away lowest fitness
-  */
+/*************************************************************/
 
-  int optimum = (nqueens-1)*nqueens/2;
-
-
-
-
+void mutation () {
+  // a random queen is moved to a random, new position (based on randomSearch)
+  int pos,newpos,queen;
+  queen = random() % nqueens;
+  pos = columnOfQueen(queen);
+  newpos = pos;
+  while (newpos == pos) {
+    newpos = random() % nqueens;
+  }
+  moveQueen(queen, newpos);
 }
 
+void sortPopulation (int size, int **arr) {
+  int i, n, value;
+ // Population is sorted on the evaluated stated, which is stored in the last position of the array.
+  for (i = 1; i < size; i++) {
+    value = arr[i][nqueens+1];
+    n = i;
+    while ((n > 0) && (arr[n-1][nqueens+1] > value)) {
+      arr[n] = arr[n-1];
+      n--;
+    }
+    arr[n] = arr[i];
+  }
+}
+
+
+void geneticAlgorithm() {
+
+  int optimum = (nqueens-1)*nqueens/2;
+  int m;
+  int i, n;
+  int **arr;
+  int generation = 0;
+  int size = 10*nqueens;
+
+  arr = malloc(size*sizeof(int *));
+  assert(arr != NULL);
+  // make initial population of size 100
+  for(i = 0; i < size; i++) {
+  	arr[i] = malloc((nqueens+1)*sizeof(int));
+  	assert(arr[i] != NULL);
+    initiateQueens(1);
+    arr [i][nqueens+1] = evaluateState();
+    }
+    sortPopulation(size, arr);
+
+
+/* Cross-over:pick a random queen n, then the positions of the queens after n of 1 parent
+and in front of n of the other parent */
+
+  while (evaluateState() != optimum ) {
+    // The best 20% of the population can reproduce
+    for (i = 0; i < size/5; i+=2) {
+      int randomPlace = random () %nqueens;
+      for (n = 0; n <= randomPlace; n++) {
+        // the worst population members are hereby deleted
+        arr [size-1][n]  = arr[i][n];
+        arr [size-1][nqueens-n] = arr[i+1][nqueens-n];
+        // random mutation occurs 1% of the time
+        m = random() % 100;
+        if (m < 2) {
+          mutation();
+        }
+        arr[size-1][nqueens+1] = evaluateState();
+        sortPopulation(size, arr);
+      }
+    }
+    generation++;
+  }
+
+  printf("Solved in %d generations\n", (generation));
+  printf ("Final state is");
+  printState();
+
+  for (i = 0; i < size; i++) {
+    free(arr[i]);
+  }
+  free(arr);
+}
+
+/*************************************************************/
 
 
 int main(int argc, char *argv[]) {
@@ -317,10 +385,12 @@ int main(int argc, char *argv[]) {
 
   initializeRandomGenerator();
 
-  initiateQueens(1);
 
-  printf("\nInitial state:");
-  printState();
+  if (algorithm != 4) {
+    initiateQueens(1);
+    printf("\nInitial state:");
+    printState();
+  }
 
   switch (algorithm) {
   case 1: randomSearch();       break;
