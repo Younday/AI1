@@ -301,9 +301,9 @@ void sortPopulation (int size, int **arr) {
   int i, n, value;
  // Population is sorted on the evaluated stated, which is stored in the last position of the array.
   for (i = 1; i < size; i++) {
-    value = arr[i][nqueens+1];
+    value = arr[i][nqueens];
     n = i;
-    while ((n > 0) && (arr[n-1][nqueens+1] > value)) {
+    while ((n > 0) && (arr[n-1][nqueens] > value)) {
       arr[n] = arr[n-1];
       n--;
     }
@@ -316,10 +316,10 @@ void geneticAlgorithm() {
 
   int optimum = (nqueens-1)*nqueens/2;
   int m;
-  int i, n;
+  int i, n, q;
   int **arr;
   int generation = 0;
-  int size = 10*nqueens;
+  int size = pow(2,nqueens);
 
   arr = malloc(size*sizeof(int *));
   assert(arr != NULL);
@@ -327,8 +327,10 @@ void geneticAlgorithm() {
   for(i = 0; i < size; i++) {
   	arr[i] = malloc((nqueens+1)*sizeof(int));
   	assert(arr[i] != NULL);
-    initiateQueens(1);
-    arr [i][nqueens+1] = evaluateState();
+    for (q = 0; q < nqueens; q++) {
+      arr[i][q] = random() %nqueens;
+    }
+    arr [i][nqueens] = evaluateState();
     }
     sortPopulation(size, arr);
 
@@ -344,12 +346,12 @@ and in front of n of the other parent */
         // the worst population members are hereby deleted
         arr [size-1][n]  = arr[i][n];
         arr [size-1][nqueens-n] = arr[i+1][nqueens-n];
-        // random mutation occurs 1% of the time
+        // random mutation occurs 4% of the time
         m = random() % 100;
-        if (m < 2) {
+        if (m < 5) {
           mutation();
         }
-        arr[size-1][nqueens+1] = evaluateState();
+        arr[size-1][nqueens] = evaluateState();
         sortPopulation(size, arr);
       }
     }
