@@ -202,14 +202,14 @@ void hillClimbing() {
           max = evaluateState();
           newqueen = queen;
         }
-<<<<<<< HEAD
+
         else if (evaluateState() == max) {
           int x = random() % 2;
           printf("%d\n", x);
-=======
+
         if (evaluateState() == max) {
           int x = random() % 2;
->>>>>>> 727b6aa620f6f95996036144125a8f1fc5fd20ba
+
           switch (x) {
             case 0:
               newpos = i;
@@ -230,6 +230,7 @@ void hillClimbing() {
   }
   printf ("Final state is");
   printState();
+}
 }
 
 
@@ -252,7 +253,7 @@ void simulatedAnnealing() {
   int dE, newqueen, ev;
   int queen, iter = 0, i;
   int optimum = (nqueens-1)*nqueens/2;
-  int max = 0, current, next;
+  int max = 0, current;
 
   while (evaluateState() != optimum) {
     ev = evaluateState();
@@ -267,22 +268,20 @@ void simulatedAnnealing() {
       for(i = 0; i < nqueens; i++) {
         current = evaluateState();
         moveQueen(queen, i);
-        next = evaluateState();
         if(current > max) {
           newpos = i;
           max = evaluateState();
           newqueen = queen;
         }
         dE = max - current;
-<<<<<<< HEAD
         if(ExpMove(dE, iter)) {
           newpos = random() % nqueens;
-=======
+
         if(dE < 0) {
           if(ExpMove(dE, iter)) {
             newpos = random() % nqueens;
           }
->>>>>>> 727b6aa620f6f95996036144125a8f1fc5fd20ba
+
         }
       }
       moveQueen(queen, pos);
@@ -294,6 +293,7 @@ void simulatedAnnealing() {
   }
   printf ("Final state is");
   printState();
+}
 }
 
 /*************************************************************/
