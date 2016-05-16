@@ -40,6 +40,27 @@
 	The problem at hand is about the n-queens problem. It is an expansion of the 8-queens problem, which has often been discussed in previous courses. The goal is to place "n" number of queens on an n*n sized board, in such a way that they are not able to hit each other. For sizes bigger than 4, more solutions are possible.
 	
 	The way to solve such a problem can be done in various ways. One approach, is to randomly place queens on the board until they accidentally have one of the right configurations. Obviously, this can be done more effectively. The first way we try to solve this, is by the hill-climbing approach. This basically means, that for every row, we look at which position is better than the previous position, and then choose that one. Still a blunt way to solve the problem, but already more sophisticated than randomly trying. The problem with this, is that it often gets stuck in local maxima. The second approach, is by simulated annealing. Simulated annealing is similar to hill-climbing, but it includes random moves, to avoid the problem with the local maxima. The way you decide when to make a random jump, is based on a relationship between the "temperature" (in this case, the number of correct queens) and the elapsed time. As the time increases, less random jumps are made. The final approach is with a generic algorithm. A genetic algorithm works much more differently. First of all, it does not use an initial state, but an initial population. This initial population is then sorted on their "fitness", which is the number of correctly placed queens. The best few are allowed to reproduce, i.e. make new states. This is done by combining two states. There is also a small chance of a random mutation in the newly produced state. By mixing up the parents and including the mutations, the population will approach the solution state, until one of the children is the correct solution.
+		
+	\subsection{Hill Climbing algorithm}
+	We will be solving this problem using three different algorithms. First, we will use Hill Climbing to solve this. This is a quite straightforward algorithm. If, in your search space, the neighbour has a higher value, go to that neighbour and repeat that process until you've found a maximum. In the case of the n-queens problem, you look at all the positions in a column and select the one with the highest value.
+	
+	For this algorithm, we look at each neighbouring state of the current column. We then evaluate each position that the queen can go to. We do that for each queen and then move that queen to the position with the highest evaluation.
+	
+	This approach is quite simple and therefore not that effective. The algorithm will not always find a solution. For the unmodified code, 6 out of 20 times in average, the algorithm was able to find a solution. We've therefore tried some improvements for the code. Hill Climbing can get stuck in local optima and then it's unable to find the global optimum. We therefore implemented something that when the algorithm is stuck, it chooses a random queen to randomly move so that is might get out of this local optimum. With this improvement, we see its success rate in Table 1. This table is in the Appendix
+
+	This algorithm does quite well up to 7 queens, after that it's performance declines. The modified code did better than the original code.
+	
+
+
+	
+	\subsection{Simulated Annealing algorithm}
+	Simulated Annealing is somewhat the same as Hill Climbing, but better. Hill Climbing is able to get stuck in local maxima, therefore not always returning the optimal solution. Simulated Annealing allows "bad moves". With these "bad moves", it is able to escape local maxima and find a global maximum. 
+	
+	For Simulated Annealing, we figuered that the temperature function should be something like: $ T(t) = (initial)T * t$, where we filled in 50 for the starting temperature and t should be something around $0.99$. We have used this function to lower the temperature until it has reached a certain value, in our case: $0.001$. This sets the maximum amount of iterations, because if the temperature drops below that certain value, the while loop of our program stops. With these values, SA is quite similar to Hill Climbing. The difference is that we have implemented a function $ExpMove()$ that decides whether a "bad move" should be made. This is where we differ from the pseudocode as well. We look at a current position and the maximum of a column to decide whether a bad move is accepted.
+	
+	For simulated Annealing, we have noticed a few things. First of all, the algorithm usually finds a solution within 50 steps. When it did not find a solution after 50 steps, its chance of finding one is very small. As might have been clear by the previous sentence, the program does not always find a solution. For a number of queens above 10 this only gets worse. Why does it get worse? For more than 10 queens, the search space gets too big for our algorithm and the "bad move" that the algorithm takes will help the algorithm.	
+	
+	
 	\subsection*{Genetic algorithm}
 	
 	The genetic algorithm consists of three functions. The first function describes the mutation. The mutation is as random as possible. It takes a random queen, and places this at a random, new position, similar to how the random-search algorithm was implemented. Next, there is a function to sort the population. The population is sorted based on the evaluateState function from the given program. This evaluation is stored on the last place in the array. For every item in the array, the evaluation is compared to the evaluation of the next one, and then shifted until they are all in the right place. The next function is the real implementation of the program. First, a 2D array is made, with a size of the number of queens to the power of 2. This is chosen, because the number of different places the queens can stand, also increases exponentially. The first dimension represents the population, the second represents the configuration of the separate parents. The parents are initially randomly produced. After this, the population is sorted and the crossover can begin. The crossover is done with the best 20 \% of the population. This was chosen to keep a fairly large amount of different configurations, but not too much. The crossover is done in pairs, so the first of the population pairs with the second, the third with the fourth and so forth. A random number between 0 and the number of queens is chosen. The first parent gives it's rows up to and including this number, and the second parent starting from this number. In this way, the child is a crossover between the parents. The child is placed at the last place in the population, thereby replacing the worst of the population. Then, 4 \% of the children receive a mutation. This seems like a high number, but we thought it was necessary, because the initial population is randomly produced, and therefore it is quite possible that there are position that are not included in any of the parents, and we try to include these positions in the population by these mutations. Then, the population is once again sorted, and the process continues until the solution is found. The population is immediately sorted after the child is made, so the process is sped up, if the child is better than the first 20 \%. Finally, the final state is printed.
@@ -85,5 +106,25 @@
 	
 	\lstinputlisting[caption = \tt nqueens.c]{queens/nqueens.c}
 	\lstinputlisting[caption = \tt nim.c]{nim/nim.c}
+	
+	\section*{Appendix}
+\begin{table}[H]
+\centering
+\caption{Succes rate of modified algorithm}
+\label{my-label}
+\begin{tabular}{ll}
+Number of Queens & Succesrate \\
+4                & 100\%      \\
+5                & 100\%      \\
+6                & 100\%      \\
+7                & 100\%      \\
+8                & 50\%       \\
+9                & 35\%       \\
+10               & 20\%       \\
+11               & 20\%       \\
+12               & 10\%       \\
+13               & 5\%       
+\end{tabular}
+\end{table}
 		
 \end{document}

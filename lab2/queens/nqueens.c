@@ -250,12 +250,12 @@ void simulatedAnnealing() {
   int queen, iter = 0, i;
   int optimum = (nqueens-1)*nqueens/2;
   int max = 0, current;
-  double temp = 50.0, alpha = 0.95;
+  double temp = 50.0, alpha = 0.99;
   double epsilon = 0.01;
 
   while (temp > epsilon) {
     ev = evaluateState();
-    printf("iteration %d: evaluation=%d\n", iter++, ev);
+    printf("iteration %d: evaluation=%d\n", iter++, evaluateState());
     if(ev == optimum) break;
     int newpos;
     for (queen=0; queen < nqueens; queen++) {
@@ -270,7 +270,6 @@ void simulatedAnnealing() {
           max = evaluateState();
           newqueen = queen;
         }
-
         dE = max - current;
         if(ExpMove(dE, temp)) {
           newpos = random() % nqueens;
@@ -280,9 +279,9 @@ void simulatedAnnealing() {
             newpos = random() % nqueens;
           }
         }
-
+        moveQueen(queen, pos);
       }
-      moveQueen(queen, pos);
+
     }
     moveQueen(newqueen, newpos);
     temp *= alpha;
