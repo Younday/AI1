@@ -219,6 +219,7 @@ void hillClimbing() {
     }
     if(ev == ev1) {
       newpos = random() % nqueens;
+      newqueen = random() % queen;
     }
     moveQueen(newqueen,newpos);
     ev1 = evaluateState();
@@ -247,19 +248,13 @@ int ExpMove(int dE, double iter) {
   }
 }
 
-double timeToTemperature(double temp) {
-  double alpha = 0.99;
-  temp = temp * alpha;
-  return temp;
-}
-
 void simulatedAnnealing() {
   int dE, newqueen, ev;
   int queen, iter = 0, i;
   int optimum = (nqueens-1)*nqueens/2;
   int max = 0, current;
-  double temp = 200.0, alpha = 0.99;
-  double epsilon = 0.0001;
+  double temp = 50.0, alpha = 0.95;
+  double epsilon = 0.01;
 
   while (temp > epsilon) {
     ev = evaluateState();
@@ -278,6 +273,7 @@ void simulatedAnnealing() {
           max = evaluateState();
           newqueen = queen;
         }
+
         dE = max - current;
         if(ExpMove(dE, temp)) {
           newpos = random() % nqueens;
