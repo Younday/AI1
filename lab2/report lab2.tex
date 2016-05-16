@@ -1,0 +1,89 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{language=C,
+	numbers=left,
+	stepnumber=1,    
+	firstnumber=1,
+	numberfirstline=true
+	aboveskip=5mm,
+	belowskip=5mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true
+	tabsize=3
+}
+
+\title{Artificial Intelligence 1 \\ Lab 2}%Update the lab (assignment number)
+\author{Roeland Lindhout (s2954524) \& Younes Moustaghfir (s2909758) \\ AI2/AI3} %Change the names and fill in the student numbers and the group name (AI1/AI2/CS1 etc)
+\date{\today}%Update the date
+
+\begin{document}
+	
+	\maketitle
+	
+	\section*{N-queens problem}
+	
+	The problem at hand is about the n-queens problem. It is an expansion of the 8-queens problem, which has often been discussed in previous courses. The goal is to place "n" number of queens on an n*n sized board, in such a way that they are not able to hit each other. For sizes bigger than 4, more solutions are possible.
+	
+	The way to solve such a problem can be done in various ways. One approach, is to randomly place queens on the board until they accidentally have one of the right configurations. Obviously, this can be done more effectively. The first way we try to solve this, is by the hill-climbing approach. This basically means, that for every row, we look at which position is better than the previous position, and then choose that one. Still a blunt way to solve the problem, but already more sophisticated than randomly trying. The problem with this, is that it often gets stuck in local maxima. The second approach, is by simulated annealing. Simulated annealing is similar to hill-climbing, but it includes random moves, to avoid the problem with the local maxima. The way you decide when to make a random jump, is based on a relationship between the "temperature" (in this case, the number of correct queens) and the elapsed time. As the time increases, less random jumps are made. The final approach is with a generic algorithm. A genetic algorithm works much more differently. First of all, it does not use an initial state, but an initial population. This initial population is then sorted on their "fitness", which is the number of correctly placed queens. The best few are allowed to reproduce, i.e. make new states. This is done by combining two states. There is also a small chance of a random mutation in the newly produced state. By mixing up the parents and including the mutations, the population will approach the solution state, until one of the children is the correct solution.
+	\subsection*{Genetic algorithm}
+	
+	The genetic algorithm consists of three functions. The first function describes the mutation. The mutation is as random as possible. It takes a random queen, and places this at a random, new position, similar to how the random-search algorithm was implemented. Next, there is a function to sort the population. The population is sorted based on the evaluateState function from the given program. This evaluation is stored on the last place in the array. For every item in the array, the evaluation is compared to the evaluation of the next one, and then shifted until they are all in the right place. The next function is the real implementation of the program. First, a 2D array is made, with a size of the number of queens to the power of 2. This is chosen, because the number of different places the queens can stand, also increases exponentially. The first dimension represents the population, the second represents the configuration of the separate parents. The parents are initially randomly produced. After this, the population is sorted and the crossover can begin. The crossover is done with the best 20 \% of the population. This was chosen to keep a fairly large amount of different configurations, but not too much. The crossover is done in pairs, so the first of the population pairs with the second, the third with the fourth and so forth. A random number between 0 and the number of queens is chosen. The first parent gives it's rows up to and including this number, and the second parent starting from this number. In this way, the child is a crossover between the parents. The child is placed at the last place in the population, thereby replacing the worst of the population. Then, 4 \% of the children receive a mutation. This seems like a high number, but we thought it was necessary, because the initial population is randomly produced, and therefore it is quite possible that there are position that are not included in any of the parents, and we try to include these positions in the population by these mutations. Then, the population is once again sorted, and the process continues until the solution is found. The population is immediately sorted after the child is made, so the process is sped up, if the child is better than the first 20 \%. Finally, the final state is printed.
+	
+	The program is very fast for problems up to 8. It is also able to solve problems with 8 and 9 queens, but this can take quite long. It does always find a solution. It all depends on the random initialization of the population. If this is done very unfortunately, it takes longer. Problems bigger than 9, have not found a solution yet. We tried a problem with 10 queens, but after 15 minutes we gave up, expecting it not to find a solution ever. The valgrind output is the following for n = 8 :
+		\begin{lstlisting}
+		Number of queens (1<=nqueens<100): 8
+		Algorithm: (1) Random search  (2) Hill climbing  (3) Simulated Annealing  (4) Genetic algorithm: 4
+		Final state is
+		....q...
+		......q.
+		.q......
+		...q....
+		.......q
+		q.......
+		..q.....
+		.....q..
+		==26906== 
+		==26906== HEAP SUMMARY:
+		==26906==     in use at exit: 0 bytes in 0 blocks
+		==26906==   total heap usage: 65 allocs, 65 frees, 2,816 bytes allocated
+		==26906== 
+		==26906== All heap blocks were freed -- no leaks are possible
+		==26906== 
+		==26906== For counts of detected and suppressed errors, rerun with: -v
+		==26906== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+		
+		\end{lstlisting}
+		
+	
+	\section*{Nim}
+	
+	The game of Nim is about a stack of items, from which each player can take 1 to 3 items each turn, after which the other player's turn is. You lose when you have to take the last item. The players in our program are thought to be playing optimally. Playing optimally means that in each situation, the best possible choice is made, based on the best possible choice in the next turn of the opponent. Doing this, it can quickly be predicted who wins. For n=3, MAX, who begins, will take 2, leaving only 1 for MIN, who then loses. For n=4, MAX will take 3, once again leaving only one for MIN, who will once again lose. For n=5, assuming optimal play, MIN will win. First, MAX will take 3, and then MIN will take 1, leaving only 1 for MAX to take. No matter what MAX does at his/her first turn, MIN will be able to do a finishing move. For n=6, MAX will win. MAX will start by taking 1 item, which will result in the same situation as discussed before this one, only from the perspective of MIN.
+	
+	\subsection*{Program description and evaluation}
+	
+	The program is fairly simple. We kept the basic structure of the given program, but we placed everything into one function. First, it is checked if the state is one. In this case, MAX has lost, and therefore -1 is returned. If this is not the case, the different moves are evaluated. Each move is recursively passed onto the function again, only negated, to show that it is MIN's turn. This is assigned to a variable. If this is variable is better than best, this variable becomes the new best. Initially, best was set to -$\infty$. The move that was the best, is stored in the variable bestmove. This is printed at the end. At this point, all moves have been decided, and printed at once. This function is used the same way as in the original program, with the only change that it does not use the variable turn.
+	
+	The program always find a solution, but somehow not always the most optimal solution, from MAX's point of view. The more items there are at the beginning, the longer it takes to find an answer. Up to $\pm$ 35, the time it takes is not too long, but after this, the program becomes very slow. 
+	
+	
+	\section*{Source code}
+	
+	\lstinputlisting[caption = \tt nqueens.c]{queens/nqueens.c}
+	\lstinputlisting[caption = \tt nim.c]{nim/nim.c}
+		
+\end{document}

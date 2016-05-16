@@ -182,11 +182,11 @@ void randomSearch() {
 /*************************************************************/
 
 void hillClimbing() {
-  int newqueen, newpos, pos, ev, ev1;
+  int newqueen, newpos, pos, ev;
   int queen, iter = 0;
   int optimum = (nqueens-1)*nqueens/2;
   int max = 0;
-  int i, x;
+  int i ,x;
 
   while ((evaluateState()) != optimum) {
     printf("iteration %d: evaluation=%d\n", iter++, evaluateState());
@@ -203,8 +203,6 @@ void hillClimbing() {
         }
         else if (evaluateState() == max) {
           x = random() % 2;
-          printf("%d\n", x);
-        }
           switch (x) {
             case 0:
               newpos = i;
@@ -216,21 +214,20 @@ void hillClimbing() {
           newqueen = queen;
         }
       moveQueen(queen, pos);
+      }
+      if (evaluateState() == ev) {
+        moveQueen(queen, random() %nqueens);
     }
-    if(ev == ev1) {
-      newpos = random() % nqueens;
-      newqueen = random() % queen;
+
     }
     moveQueen(newqueen,newpos);
-    ev1 = evaluateState();
-}
+  }
   if (iter < MAXITER) {
     printf ("Solved puzzle. ");
   }
   printf ("Final state is");
   printState();
 }
-
 
 
 /*************************************************************/
@@ -333,8 +330,7 @@ void geneticAlgorithm() {
   int m;
   int i, n, q;
   int **arr;
-  int generation = 0;
-  int size = pow(2,nqueens);
+  int size = pow(nqueens,2);
 
   arr = malloc(size*sizeof(int *));
   assert(arr != NULL);
@@ -347,8 +343,8 @@ void geneticAlgorithm() {
     }
     arr [i][nqueens] = evaluateState();
     }
-    sortPopulation(size, arr);
 
+    sortPopulation(size, arr);
 
 /* Cross-over:pick a random queen n, then the positions of the queens after n of 1 parent
 and in front of n of the other parent */
@@ -370,10 +366,8 @@ and in front of n of the other parent */
         sortPopulation(size, arr);
       }
     }
-    generation++;
   }
 
-  printf("Solved in %d generations\n", (generation));
   printf ("Final state is");
   printState();
 
