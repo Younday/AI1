@@ -6,70 +6,6 @@
 
 #define INFINITY 9999999
 
-
-int minValue(int state); /* forward declaration: mutual recursion */
-
-int maxValue(int state) {
-  int move, max = -INFINITY;
-  /* terminal state ? */
-  if (state == 1) {
-    return -1; /* Min wins if max is in a terminal state */
-  }
-  /* non-terminal state */
-  for (move = 1; move <= 3; move++) {
-    if (state - move > 0) { /* legal move */
-      int m = minValue(state - move);
-      if (m > max) max = m;
-    }
-  }
-  return max;
-}
-
-int minValue(int state) {
-  int move, min = INFINITY;
-  /* terminal state ? */
-  if (state == 1) {
-    return 1; /* Max wins if min is in a terminal state */
-  }
-  /* non-terminal state */
-  for (move = 1; move <= 3; move++) {
-    if (state - move > 0) { /* legal move */
-      int m = maxValue(state - move);
-      if (m < min) min = m;
-    }
-  }
-  return min;
-}
-
-int minimaxDecision(int state, int turn) {
-  int move, bestmove, max, min;
-  if (turn == MAX) {
-    max = -INFINITY;
-    for (move = 1; move <= 3; move++) {
-      if (state - move > 0) { /* legal move */
-        int m = minValue(state - move);
-        if (m > max) {
-          max = m;
-          bestmove = move;
-        }
-      }
-    }
-    return bestmove;
-  }
-  /* turn == MIN */
-  min = INFINITY;
-  for (move = 1; move <= 3; move++) {
-    if (state - move > 0) { /* legal move */
-      int m = maxValue(state - move);
-      if (m < min) {
-        min = m;
-        bestmove = move;
-      }
-    }
-  }
-  return bestmove;
-}
-
 int negaMax(int state) {
   int move, bestmove, best = -INFINITY;
   int m;
@@ -82,7 +18,6 @@ int negaMax(int state) {
       if (m > best) {
         best = m;
         bestmove = move;
-        printf("%d\n", bestmove);
       }
     }
   }

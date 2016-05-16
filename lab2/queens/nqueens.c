@@ -187,11 +187,13 @@ void hillClimbing() {
   int optimum = (nqueens-1)*nqueens/2;
   int max = 0;
   int i;
+  int ev;
 
   while ((evaluateState()) != optimum) {
     printf("iteration %d: evaluation=%d\n", iter++, evaluateState());
     if (iter == MAXITER) break;  /* give up */
     /* generate a (new) random state: for each queen do ...*/
+    ev = evaluateState();
     for (queen=0; queen < nqueens; queen++) {
       pos = columnOfQueen(queen);
       for(i = 0; i < nqueens; i++) {
@@ -201,19 +203,9 @@ void hillClimbing() {
           max = evaluateState();
           newqueen = queen;
         }
-<<<<<<< HEAD
 
         else if (evaluateState() == max) {
           int x = random() % 2;
-          printf("%d\n", x);
-
-        if (evaluateState() == max) {
-          int x = random() % 2;
-
-=======
-        if (evaluateState() == max) {
-          int x = random() % 2;
->>>>>>> 3c7164ae00a187d05e0245f2d3263f6dbc55bc53
           switch (x) {
             case 0:
               newpos = i;
@@ -226,15 +218,17 @@ void hillClimbing() {
         }
       }
       moveQueen(queen, pos);
+      if (evaluateState() == ev) {
+        moveQueen(queen, random() %nqueens);
+      }
     }
     moveQueen(newqueen,newpos);
-}
+  }
   if (iter < MAXITER) {
     printf ("Solved puzzle. ");
   }
   printf ("Final state is");
   printState();
-}
 }
 
 
@@ -271,30 +265,17 @@ void simulatedAnnealing() {
       /* change in random new location */
       for(i = 0; i < nqueens; i++) {
         moveQueen(queen, i);
-<<<<<<< HEAD
-=======
         current = evaluateState();
->>>>>>> 3c7164ae00a187d05e0245f2d3263f6dbc55bc53
         if(current > max) {
           newpos = i;
           max = evaluateState();
           newqueen = queen;
         }
         dE = max - current;
-<<<<<<< HEAD
-        if(ExpMove(dE, iter)) {
-          newpos = random() % nqueens;
-
-=======
->>>>>>> 3c7164ae00a187d05e0245f2d3263f6dbc55bc53
         if(dE < 0) {
           if(ExpMove(dE, iter)) {
             newpos = random() % nqueens;
           }
-<<<<<<< HEAD
-
-=======
->>>>>>> 3c7164ae00a187d05e0245f2d3263f6dbc55bc53
         }
       }
       moveQueen(queen, pos);
@@ -307,7 +288,7 @@ void simulatedAnnealing() {
   printf ("Final state is");
   printState();
 }
-}
+
 
 /*************************************************************/
 
@@ -344,8 +325,7 @@ void geneticAlgorithm() {
   int m;
   int i, n, q;
   int **arr;
-  int generation = 0;
-  int size = pow(2,nqueens);
+  int size = pow(nqueens,2);
 
   arr = malloc(size*sizeof(int *));
   assert(arr != NULL);
@@ -358,8 +338,8 @@ void geneticAlgorithm() {
     }
     arr [i][nqueens] = evaluateState();
     }
-    sortPopulation(size, arr);
 
+    sortPopulation(size, arr);
 
 /* Cross-over:pick a random queen n, then the positions of the queens after n of 1 parent
 and in front of n of the other parent */
@@ -381,10 +361,8 @@ and in front of n of the other parent */
         sortPopulation(size, arr);
       }
     }
-    generation++;
   }
 
-  printf("Solved in %d generations\n", (generation));
   printf ("Final state is");
   printState();
 
