@@ -35,7 +35,7 @@
 	
 	\maketitle
 	
-	\section*{N-queens problem}
+	\section{N-queens problem}
 	
 	The problem at hand is about the n-queens problem. It is an expansion of the 8-queens problem, which has often been discussed in previous courses. The goal is to place "n" number of queens on an n*n sized board, in such a way that they are not able to hit each other. For sizes bigger than 4, more solutions are possible.
 	
@@ -61,7 +61,7 @@
 	For simulated Annealing, we have noticed a few things. First of all, the algorithm usually finds a solution within 50 steps. When it did not find a solution after 50 steps, its chance of finding one is very small. As might have been clear by the previous sentence, the program does not always find a solution. For a number of queens above 10 this only gets worse. Why does it get worse? For more than 10 queens, the search space gets too big for our algorithm and the "bad move" that the algorithm takes will help the algorithm. We've played around with different temperatures and they don't seem to matter that much. As long as the temperature is not too low, the program does find a solution sometimes. If the problem is small, a lower temperature is needed. If the problem size increases, you might have to increase the temperature. The program, for some reason, does not always find a solution. For a size bigger than 10, the program gets to the point were is does not find a solution at all after some tries. 
 	
 	
-	\subsection*{Genetic algorithm}
+	\subsection{Genetic algorithm}
 	
 	The genetic algorithm consists of three functions. The first function describes the mutation. The mutation is as random as possible. It takes a random queen, and places this at a random, new position, similar to how the random-search algorithm was implemented. Next, there is a function to sort the population. The population is sorted based on the evaluateState function from the given program. This evaluation is stored on the last place in the array. For every item in the array, the evaluation is compared to the evaluation of the next one, and then shifted until they are all in the right place. The next function is the real implementation of the program. First, a 2D array is made, with a size of the number of queens to the power of 2. This is chosen, because the number of different places the queens can stand, also increases exponentially. The first dimension represents the population, the second represents the configuration of the separate parents. The parents are initially randomly produced. After this, the population is sorted and the crossover can begin. The crossover is done with the best 20 \% of the population. This was chosen to keep a fairly large amount of different configurations, but not too much. The crossover is done in pairs, so the first of the population pairs with the second, the third with the fourth and so forth. A random number between 0 and the number of queens is chosen. The first parent gives it's rows up to and including this number, and the second parent starting from this number. In this way, the child is a crossover between the parents. The child is placed at the last place in the population, thereby replacing the worst of the population. Then, 4 \% of the children receive a mutation. This seems like a high number, but we thought it was necessary, because the initial population is randomly produced, and therefore it is quite possible that there are position that are not included in any of the parents, and we try to include these positions in the population by these mutations. Then, the population is once again sorted, and the process continues until the solution is found. The population is immediately sorted after the child is made, so the process is sped up, if the child is better than the first 20 \%. Finally, the final state is printed.
 	
@@ -91,23 +91,25 @@
 		\end{lstlisting}
 		
 	
-	\section*{Nim}
+	\section{Nim}
 	
 	The game of Nim is about a stack of items, from which each player can take 1 to 3 items each turn, after which the other player's turn is. You lose when you have to take the last item. The players in our program are thought to be playing optimally. Playing optimally means that in each situation, the best possible choice is made, based on the best possible choice in the next turn of the opponent. Doing this, it can quickly be predicted who wins. For n=3, MAX, who begins, will take 2, leaving only 1 for MIN, who then loses. For n=4, MAX will take 3, once again leaving only one for MIN, who will once again lose. For n=5, assuming optimal play, MIN will win. First, MAX will take 3, and then MIN will take 1, leaving only 1 for MAX to take. No matter what MAX does at his/her first turn, MIN will be able to do a finishing move. For n=6, MAX will win. MAX will start by taking 1 item, which will result in the same situation as discussed before this one, only from the perspective of MIN.
 	
-	\subsection*{Program description and evaluation}
+	\subsection{Program description and evaluation}
 	
 	The program is fairly simple. We kept the basic structure of the given program, but we placed everything into one function. First, it is checked if the state is one. In this case, MAX has lost, and therefore -1 is returned. If this is not the case, the different moves are evaluated. Each move is recursively passed onto the function again, only negated, to show that it is MIN's turn. This is assigned to a variable. If this is variable is better than best, this variable becomes the new best. Initially, best was set to -$\infty$. The move that was the best, is stored in the variable bestmove. This is printed at the end. At this point, all moves have been decided, and printed at once. This function is used the same way as in the original program, with the only change that it does not use the variable turn.
 	
 	The program always find a solution, but somehow not always the most optimal solution, from MAX's point of view. The more items there are at the beginning, the longer it takes to find an answer. Up to $\pm$ 35, the time it takes is not too long, but after this, the program becomes very slow. 
 	
+	When we run the program with 10, 20, 30, 40 and 50, we see a clear pattern occurring. The program switches between choosing 1 and 3 matches to take of the pile. Min always loses in those cases. If a transposition table was made, this could easily be stored in there. In certain states, it quite clear which move to make, but it might still cost a lot of computational resources. For 50 matches, it takes quite some time to calculate each state and choose the correct one. Transposition tables help the program to become faster. We were not able to insert a transposition table into our program.
 	
-	\section*{Source code}
+	
+	\section{Source code}
 	
 	\lstinputlisting[caption = \tt nqueens.c]{queens/nqueens.c}
 	\lstinputlisting[caption = \tt nim.c]{nim/nim.c}
 	
-	\section*{Appendix}
+	\section{Appendix}
 \begin{table}[H]
 \centering
 \caption{Succes rate of modified algorithm}
