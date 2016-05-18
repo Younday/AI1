@@ -1,0 +1,23 @@
+#The set of variables of the CSP
+variables:
+	S,E,N,D,M,O,R,Y : integer;
+	X1, X2, X3, X4 : integer;
+
+#Here the domains are defined
+domains:
+	S,E,N,D,M,O,R,Y <- [0..9];
+	X1, X2, X3, X4 <- [0,1];
+
+#Here are the constraints:
+constraints:
+	alldiff(S,E,N,D,M,O,R,Y);
+	D + E = Y + 10 *X1;
+	X1 + N + R = E + 10 * X2;
+	X2 + E + O = N + 10 * X3;
+	X3 + S + M = O + 10 * X4;
+	X4 = M;
+	M = 1;
+	
+# Here you can specify in how many solutions
+# you are interested (all, 1, 2, 3, ...)  
+solutions: all 
