@@ -1,0 +1,29 @@
+#The set of variables of the CSP
+variables:
+	O, N, E, I, T, W, Y, F, G, H : integer;
+	X1, X2, X3, X4, X5 : integer;
+
+#Here the domains are defined
+domains:
+	I, W, G, H <- [0..9];
+	O, N, T, F, E <- [1..9]; #omdat begin woord
+	Y <- [0,2,4,6,8]; #omdat E + E even is, dus dit moet even zijn
+	X1, X2 <- [1,2]; # omdat niet 0 en niet groter dan 29
+	X3 <- [0..3];	# omdat carry-over
+	X4 <- [0..2]; # same
+	X5 <- [1]; # same
+
+#Here are the constraints:
+constraints:
+	W + F + X4 > 10;
+	alldiff(O, N, E, I, T, W, Y, F, G, H);
+	E + E + Y =10 *X1;
+	X1 + N + N + T= 10 * X2;
+	X2 + O + I + N + F = H + 10 * X3;
+	X3 + N + E + I = G + 10 * X4;
+	X4 + W + F = I + 10 * X5;
+	X5 + T = E;
+
+# Here you can specify in how many solutions
+# you are interested (all, 1, 2, 3, ...)  
+solutions: all 

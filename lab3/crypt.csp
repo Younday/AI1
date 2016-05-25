@@ -5,7 +5,8 @@ variables:
 
 #Here the domains are defined
 domains:
-	S,E,N,D,M,O,R,Y <- [0..9];
+	S,E,N,D, O,R,Y <- [0..9];
+	M <- [1..9];
 	X1, X2, X3, X4 <- [0,1];
 
 #Here are the constraints:
@@ -16,7 +17,6 @@ constraints:
 	X2 + E + O = N + 10 * X3;
 	X3 + S + M = O + 10 * X4;
 	X4 = M;
-	M = 1;
 	
 # Here you can specify in how many solutions
 # you are interested (all, 1, 2, 3, ...)  

@@ -1,0 +1,24 @@
+#The set of variables of the CSP
+variables:
+
+	d[75] : integer;
+	A : integer;	
+	
+
+#Here the domains are defined
+domains:
+ 
+	d <- [0..74];
+	A <- [2..75];
+#Here are the constraints:
+constraints:
+	
+	forall(i in [2..74])
+	A mod 2 <> 0;
+	d[i] = i+1;
+	end
+
+
+# Here you can specify in how many solutions
+# you are interested (all, 1, 2, 3, ...)  
+solutions: all 

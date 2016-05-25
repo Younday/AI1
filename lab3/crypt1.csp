@@ -5,7 +5,8 @@ variables:
 
 #Here the domains are defined
 domains:
-	U,N,E,F,O,Z <- [0..9];
+	U,N,E,F, Z <- [0..9];
+	O <- [1..9];
 	X1, X2 <- [0..2];
 	X3 <- [0,1];
 #Here are the constraints:
