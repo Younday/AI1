@@ -1,0 +1,24 @@
+#The set of variables of the CSP
+variables:
+	
+	q1, q2, q3, q4 : integer;
+	
+
+#Here the domains are defined
+domains:
+	
+	q1, q2, q3, q4 <- [1..4];
+
+
+#Here are the constraints:
+constraints:
+	
+	alldiff(q1,q2,q3, q4);
+	abs(q1-q2) <> abs(1-2);
+	abs(q2-q3) <> abs(2-3);
+	abs(q3-q4) <> abs(3-4);
+	
+	
+# Here you can specify in how many solutions
+# you are interested (all, 1, 2, 3, ...)  
+solutions: all
