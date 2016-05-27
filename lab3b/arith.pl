@@ -23,6 +23,18 @@ times(X,s(Y),Z) :- times(X,Y,Z1), plus(X,Z1,Z).
 pow(X,0,s(0)) :- isnumber(X).
 pow(X,s(Y),Z) :- pow(X,Y,Z1), times(X,Z1,Z).
 
+% even(X) is true if X is even
+even(X) :- isnumber(X).
+even(s(X)) :- X mod 2 =:= 0.
+
+% odd(X) is true if X is odd
+odd(X) :- isnumber(X).
+odd(X) :- not(X mod 2 =:= 0).
+
+% div2(X,Y) is true if X div 2 is Y
+div2(X, X) :- isnumber(X).
+div2(X, Y) :- X div 2 =:= Y.
+
 % Example queries:
 % Isnumbers are represented as successors of 0. For example, 2 is s(s(0)).
 % 2+2=4 is plus(s(s(0)), s(s(0)), s(s(s(s(0)))))
