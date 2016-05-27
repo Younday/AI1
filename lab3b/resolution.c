@@ -2,9 +2,9 @@
 #include <stdlib.h>
 
 /* Assumption: the propositional symbols are a, b, .., z.
- * So, each propositional formula contains at most 26 
- * different variables. Sets of variables can therefore 
- * be represented by 26 bits, hence an integer (bitstring 
+ * So, each propositional formula contains at most 26
+ * different variables. Sets of variables can therefore
+ * be represented by 26 bits, hence an integer (bitstring
  * of 32 bits) suffices.
  */
 
@@ -48,7 +48,7 @@ int expectLetter(char c) {
 
 void makeClause(clause *c, char *cstr) {
   /* Converts the string cstr into a clause.
-   * For example, the clause {a,b,~c} is represented 
+   * For example, the clause {a,b,~c} is represented
    * by the string "a,b,~c".
    */
   int n, idx = 0;
@@ -198,9 +198,9 @@ void unionOfClauseSets(clauseSet *a, clauseSet b) {
 }
 
 void crossClauses(clause a, clause b, clauseSet *rsv) {
-  /* returns in rsv the set of clauses that are produced by 
+  /* returns in rsv the set of clauses that are produced by
    * resolving the positive literals of a with the negative literals
-   * of b. Note that rsv must be an empty set, before 
+   * of b. Note that rsv must be an empty set, before
    * calling this function.
    */
   int crossing = a.positive & b.negative;
@@ -218,7 +218,7 @@ void crossClauses(clause a, clause b, clauseSet *rsv) {
 }
 
 void printClauseSet(clauseSet s) {
-  /* prints set of clauses s on standard output */  
+  /* prints set of clauses s on standard output */
   int i;
   printf("{");
   if (s.size > 0) {
@@ -232,7 +232,7 @@ void printClauseSet(clauseSet s) {
 }
 
 void printlnClauseSet(clauseSet s) {
-  /* prints set of clauses s followed by a newline on standard output */  
+  /* prints set of clauses s followed by a newline on standard output */
   printClauseSet(s);
   putchar('\n');
 }
@@ -248,7 +248,7 @@ void resolveClauses(clause a, clause b, clauseSet *rsv) {
 
 void resolution(clauseSet *kb) {
   /* Extends the kb with rules that can be inferred by resolution.
-   * The function returns, as soon as it inferred the empty 
+   * The function returns, as soon as it inferred the empty
    * clause (i.e. false). The function also returns, if all possible
    * resolvents have been computed.
    */
@@ -259,9 +259,9 @@ void resolution(clauseSet *kb) {
     for (i=0; i < kb->size; i++) {
       for (j=i+1; j < kb->size; j++) {
         clauseSet resolvents;
-	resolveClauses(kb->clauses[i], kb->clauses[j], &resolvents);
-	unionOfClauseSets(&inferred, resolvents);
-	freeClauseSet(resolvents);
+	      resolveClauses(kb->clauses[i], kb->clauses[j], &resolvents);
+	      unionOfClauseSets(&inferred, resolvents);
+	      freeClauseSet(resolvents);
       }
     }
     if (isClauseSubset(inferred, *kb)) {
@@ -273,10 +273,25 @@ void resolution(clauseSet *kb) {
 }
 
 void init(clauseSet *s) {
-  /* makes KB with clauses: {~a,~b}, {a,~b,~c,~d}, {b,~d}, {c,~d} */
   clause c;
+  int n, i = 0, j;
+  char string[25];
+  printf("Number of Clauses?\n");
+  scanf("%d\n", &n);
   makeEmptyClauseSet(s);
-  /* clause {~a,~b} */
+  for(j = 0; j < n; j++) {
+    if (getchar() == '[') {
+      scanf("%c", &string[i]);
+      i++;
+    }
+    i = 0;
+    while (string[i] != '\0') {
+      printf("%c", string[i]);
+      i++;
+    }
+  }
+
+
   makeClause(&c, "~a,~b");
   insertInClauseSet(c, s);
   /* clause , {a,~b,~c,~d} */
@@ -294,7 +309,7 @@ void init(clauseSet *s) {
 }
 
 void recursivePrintProof(int idx, clauseSet s) {
-  printf("IMPLEMENT THE ROUTINE recursivePrintProof yourself!\n");
+
 }
 
 void printProof(clauseSet s) {
@@ -304,7 +319,7 @@ void printProof(clauseSet s) {
   idx = findIndexOfClause(empty, s);
   recursivePrintProof(idx, s);
 }
-	       
+
 int main(int argc, char *argv[]) {
   clauseSet kb;
   init(&kb);

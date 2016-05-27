@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include <ctype.h>
 
 #define MAXKBSIZE          1024
@@ -57,7 +58,7 @@ Expression makeIdentifier(char *ident) {
     /* new identifier, insert in symbol table */
     strncpy(identifiers[i], ident, MAXIDENTNAMELENGTH);
     identifiers[i][MAXIDENTNAMELENGTH-1]='\0';
-    cntidents++; 
+    cntidents++;
   }
   e = malloc(sizeof(struct Expression));
   e->operator = IDENTIFIER;
@@ -86,7 +87,7 @@ Expression makeBinaryExpr(int op, Expression arg1, Expression arg2) {
 
 void printExpression(Expression e) {
   if (e->operator == CONSTANT) {
-    printf ("%s", (e->atom==TRUE ? "true" :"false")); 
+    printf ("%s", (e->atom==TRUE ? "true" :"false"));
     return;
   }
   if (e->operator == IDENTIFIER) {
@@ -98,10 +99,10 @@ void printExpression(Expression e) {
     printExpression(e->operand1);
     return;
   }
- 
+
   printf("(");
   printExpression(e->operand1);
- 
+
   switch(e->operator) {
   case EQUIV:
     printf (" <=> ");
@@ -173,7 +174,7 @@ int nextchar(int skipspaces) {
       linenr++;
       colnr = 0;
     }
-  } while ((skipspaces) && 
+  } while ((skipspaces) &&
 	   ((curchar == ' ') || (curchar == '\t') || (curchar == '\n')));
   curchar = tolower(curchar);
   return curchar;
@@ -213,14 +214,14 @@ Expression parseEquivalence();  /* forward decl. (mutual recursion) */
 Expression parseAtom() {
   char id[MAXIDENTNAMELENGTH];
   int i=0;
-  
+
   /* identifier/true/false */
   if (!isalpha(curchar)) {
     showLocation();
     printf("parse error, expected false, true, identifier or (expression)\n");
     exit(EXIT_FAILURE);
   }
-  
+
   while ((i < MAXIDENTNAMELENGTH) && (isalnum(curchar))) {
     id[i++] = curchar;
     nextchar(FALSE);
@@ -229,7 +230,7 @@ Expression parseAtom() {
   if (i > MAXIDENTNAMELENGTH) {
     printf("Error: identifier (%s..) too long ", id);
     printf("(maximum length is %d characters)\n", MAXIDENTNAMELENGTH);
-    exit(EXIT_FAILURE); 
+    exit(EXIT_FAILURE);
   }
   id[i] = '\0';
   if ((curchar == ' ') || (curchar == '\t') || (curchar == '\n')) {
@@ -323,7 +324,7 @@ int parseSentenceSet(char *setname, Expression expset[]) {
   matchIdentifier(setname);
   match("=");
   match("[");
-  numberOfSentences = parseSentences(expset);  
+  numberOfSentences = parseSentences(expset);
   match("]");
   return numberOfSentences;
 }
@@ -360,7 +361,7 @@ void evaluateRandomModel(int modelSize) {
   /* print model */
   printf("Random chosen model: ");
   showModel(modelSize);
-  
+
   /* evaluate KB */
   printf("  KB evaluates to ");
   showBoolean(evaluateExpressionSet(kbSize, kb));
@@ -376,10 +377,21 @@ void evaluateRandomModel(int modelSize) {
 
 int checkAllModels(int modelSize) {
   /* return 1 if KB entails INFER, otherwise 0 */
-  inferred = 1;
-  printf("THE FUNCTION checkAllModels IS NOT IMPLEMENTED YET\n");
-  printf("PLEASE IMPLEMENT IT YOURSELF!\n");
-  printf("THIS FUNCTION CURRENTLY ALWAYS RETURNS 1.\n\n");
+  inferred = 0;
+  int i,j;
+  int cnt = 0;
+  while (cnt < pow(2,modelSize)) {
+    for (i = 0; i < modelSize; i++) {
+      for(j = 0; j < 2; j++) {
+        model[i] = j;
+        if (evaluateExpressionSet(inferSize, infer)) {
+          return inferred = 1;
+        }
+        cnt++;
+      }
+    }
+  }
+  showModel(modelSize);
   return inferred;
 }
 
@@ -392,7 +404,6 @@ int main(int argc, char *argv[]) {
   showExpSet("INFER", inferSize, infer);
   printf("\n");
 
-  evaluateRandomModel(cntidents);
 
   printf("\n");
   if (checkAllModels(cntidents)) {
