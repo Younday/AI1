@@ -2,21 +2,23 @@
 variables:
 
 	d[75] : integer;
-	A : integer;	
+	s[21] : integer;	
 	
 
 #Here the domains are defined
 domains:
  
-	d <- [0..74];
-	A <- [2..75];
+	d <- [0..75];
+	s <- [0..75];
 #Here are the constraints:
 constraints:
 	
-	forall(i in [2..74])
-	A mod 2 <> 0;
-	d[i] = i+1;
+	forall(i in [0..20])
+	forall(j in [21..40])
+	s[i] = j;
 	end
+	end
+	
 
 
 # Here you can specify in how many solutions
