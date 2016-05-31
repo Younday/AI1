@@ -381,15 +381,17 @@ int checkAllModels(int modelSize) {
   int i,j;
   int cnt = 0;
   while (cnt < pow(2,modelSize)) {
-    for (i = 0; i < modelSize; i++) {
-      for(j = 0; j < 2; j++) {
-        model[i] = j;
-        if (evaluateExpressionSet(inferSize, infer)) {
-          return inferred = 1;
-        }
-        cnt++;
-      }
+    i = cnt;
+    j = 1;
+    while (i != 0) {
+      model[modelSize-j] = i%2;
+      i = i/2;
+      j++;
     }
+    if (evaluateExpressionSet(inferSize, infer)) {
+      return inferred = 1;
+    }
+    cnt++;
   }
   showModel(modelSize);
   return inferred;
