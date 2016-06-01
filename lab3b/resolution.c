@@ -274,22 +274,13 @@ void resolution(clauseSet *kb) {
 
 void init(clauseSet *s) {
   clause c;
-  int n, i = 0, j;
-  char string[25];
-  printf("Number of Clauses?\n");
-  scanf("%d\n", &n);
   makeEmptyClauseSet(s);
-  for(j = 0; j < n; j++) {
-    if (getchar() == '[') {
-      scanf("%c", &string[i]);
-      i++;
-    }
-    i = 0;
-    while (string[i] != '\0') {
-      printf("%c", string[i]);
-      i++;
-    }
+
+  while () {
+    
   }
+
+
 
 
   makeClause(&c, "~a,~b");

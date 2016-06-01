@@ -1,24 +1,20 @@
 #The set of variables of the CSP
 variables:
+	
+	A : integer;
 
-	d[75] : integer;
-	s[21] : integer;	
 	
 
 #Here the domains are defined
 domains:
- 
-	d <- [0..75];
-	s <- [0..75];
+	 A <- [2..75];
+
 #Here are the constraints:
 constraints:
 	
-	forall(i in [0..20])
-	forall(j in [21..40])
-	s[i] = j;
+	forall(i in [2..9])
+	any((A mod i),(i div A)); 
 	end
-	end
-	
 
 
 # Here you can specify in how many solutions

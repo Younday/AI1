@@ -1,20 +1,21 @@
 #The set of variables of the CSP
 variables:
-x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16 : integer;
+ A[4][4] : integer;
 
 #Here the domains are defined
 domains:
-x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16 <- [1..16];
+A <- [1..16];
 
 #Here are the constraints:
 constraints:
-	alldiff(x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16);
-	x1 + x2 + x3 + x4 = 34;
-	x5 + x6 + x7 + x8 = 34;
-	x9 + x10 + x11 + x12 = 34;
-	x13 + x14 + x15 + x16 = 34;
-	x1 + x6 + x11 + x16 = 34;
-	x4 + x7 + x10 + x13 = 34;
+	alldiff(A);
+	forall(i in [0..3])
+	A[i][0] + A[i][1] + A[i][2] + A[i][3] = 34;
+	A[0][i] + A[1][i] + A[2][i] + A[3][i] = 34;
+	end
+	A[0][0] + A[1][1] + A[2][2] + A[3][3] = 34;
+	A[0][3] + A[1][2] + A[2][1] + A[3][0] = 34;
+	
 	
 
 # Here you can specify in how many solutions
