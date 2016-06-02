@@ -9,7 +9,7 @@ domains:
 #Here are the constraints:
 constraints:
 	
-	Z = 42;
+	
 	A = B;
 	B = C;
 	C = D;
