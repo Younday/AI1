@@ -294,7 +294,13 @@ Most of the constraints are quite logical, but we chose the value 1 for M, becau
 	The program was already quite effective, with 35 states visited. Both arc and forward checking reduce this to 29 states. There was not much more room for improvement. All the other heuristics had no effect.
 	
 	\section{Logic}
+	\subsection*{Model checking in propositional logic}
 	
+	The inferred state is entailed, if it is true, regardless of what the knowledge-base is. So, to check if it is entailed, we have to check all the different truth-values, until we find one for which the inferred state evaluates to true. When this is the case, it is entailed, and we can stop searching. If not, we had to ensure that we do not infinitely keep searching, but stop after we've had all the options, so we implemented a counter, which had to be lower than the square of the number of variables, because that is the amount of options there are, since every variable can have only 2 truth-values. Next, the actual testing of the values is done. Since everything is bitwise, this too had to be done bitwise. For each variable, we check each value, and then move on to the next variable. This is done until all options have been, but the cycle is terminated when the inferred state is evaluated to true. Then, the function returns one. When the count is at the limit, the program shows the last model, which is of course an example of a configuration where it is not entailed, and then the function returns one. The random-model function is no longer used in the program, because it is replaced by this. 
+	
+	\subsection*{Resolution in propositional logic}
+	
+	\subsection*{Prolog}
 	
 	\section{Appendix}
 	\subsection*{CSP's}
@@ -648,6 +654,35 @@ Most of the constraints are quite logical, but we chose the value 1 for M, becau
 	\end{lstlisting}
 	
 	\end{itemize}
-
+	
+	\subsection*{Code}
+	\begin{itemize}
+	\item Check all models
+	\begin{lstlisting}
+	int checkAllModels(int modelSize) {
+	/* return 1 if KB entails INFER, otherwise 0 */
+	inferred = 0;
+	int i,j;
+	int cnt = 0;
+	while (cnt < pow(2,modelSize)) {
+	i = cnt;
+	j = 1;
+	while (i != 0) {
+	model[modelSize-j] = i%2;
+	i = i/2;
+	j++;
+	}
+	if (evaluateExpressionSet(inferSize, infer)) {
+	return inferred = 1;
+	}
+	cnt++;
+	}
+	showModel(modelSize);
+	return inferred;
+	}
+	\end{lstlisting}
+	
+	
+	\end{itemize}
 		
 \end{document}

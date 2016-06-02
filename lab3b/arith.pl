@@ -28,7 +28,7 @@ even(X) :- isnumber(X).
 even(s(X)) :- X mod 2 =:= 0.
 
 % odd(X) is true if X is odd
-odd(X) :- isnumber(X).
+odd(X) :- (isnumber(X).
 odd(X) :- not(X mod 2 =:= 0).
 
 % div2(X,Y) is true if X div 2 is Y
