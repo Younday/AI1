@@ -51,10 +51,15 @@ fib(0, 0) :- isnumber(0).
 fib(1, 1) :- isnumber(0).
 fib(X, Y) :- X > 1, X1 is X - 1, X2 is X-2, fib(X1, Y1), fib(X2, Y2), Y is Y1+Y2.
 
+% power(X,N,Y) is true if X^N = Y
+power(X,0,Y) :- isnumber(s(0)).
+power(X,N,Y) :- even(N), N1 is div(N,2), pow(X,2,Z), pow(Z, N1, Y).  
+power(X,N,Y) :- odd(N), N1 is div(N-1,2), pow(X,2,Z), pow(Z, N1, W), Y is X * W.
+
 % len(T, N)
 len([],0).
 len([H|T],N) :- len(T,N1), N is N1+1.
-printf("asdfdaf\n");
+
       
 % member(X, L) is true if X is a member of list L
 member(X, [X|_]).
