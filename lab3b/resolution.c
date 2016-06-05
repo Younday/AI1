@@ -276,23 +276,33 @@ void init(clauseSet *s) {
   clause c;
   char i;
   int j = 0;
+<<<<<<< HEAD
   char arr[10];
+=======
+  char *arr = malloc(10*sizeof(char));
+>>>>>>> c0b464dec76efd9f77fc11576d2611feb47aef87
   makeEmptyClauseSet(s);
   scanf("%c" , &i);
   while (i != ' ') {
     if (i == '[') {
       while (i != ']') {
       if ( i != '[') {
+<<<<<<< HEAD
         //printf("asdfdaf\n");
         printf("%c\n", i);
+=======
+>>>>>>> c0b464dec76efd9f77fc11576d2611feb47aef87
         arr[j] = i;
+        printf("%c", arr[j]);
         j++;
         }
         scanf("%c", &i);
       }
+      arr[j] = '\0';
       makeClause(&c, arr);
       insertInClauseSet(c,s);
       j = 0;
+<<<<<<< HEAD
     }
     scanf("%c", &i);
   }
@@ -313,6 +323,13 @@ void init(clauseSet *s) {
   /* add clause {d}: negation of goal ~d */
   makeClause(&c, "d");
   insertInClauseSet(c, s);
+=======
+      printClause(c);
+      free(arr);
+    }
+    scanf("%c", &i);
+  }
+>>>>>>> c0b464dec76efd9f77fc11576d2611feb47aef87
 }
 
 void recursivePrintProof(int idx, clauseSet s) {
