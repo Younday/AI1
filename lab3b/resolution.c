@@ -274,7 +274,7 @@ void resolution(clauseSet *kb) {
 
 void init(clauseSet *s) {
   clause c;
-  char i;
+  /*char i;
   int j = 0;
   char arr[10];
   arr = malloc(10*sizeof(char));
@@ -298,9 +298,9 @@ void init(clauseSet *s) {
     }
     scanf("%c", &i);
   }
+*/
 
-
-
+  makeEmptyClauseSet(s);
   makeClause(&c, "~a,~b");
   insertInClauseSet(c, s);
   /* clause , {a,~b,~c,~d} */
@@ -318,9 +318,24 @@ void init(clauseSet *s) {
 }
 
 void recursivePrintProof(int idx, clauseSet s) {
-
-  printf("%d", idx);
-
+  clauseSet resolvents;
+  clauseSet Kb;
+  int i,j;
+  for (i=0; i < Kb.size; i++) {
+    printf("blabla\n");
+    for (j=i+1; j < Kb.size; j++) {
+      resolveClauses(Kb.clauses[i], Kb.clauses[j], &resolvents);
+      printf("gaat nog goed\n");
+      if(areEqualClauses(resolvents.clauses[0], s.clauses[idx]) || areEqualClauses(resolvents.clauses[1], s.clauses[idx])) {
+        printClause(s.clauses[idx]);
+        printf("is inferred from");
+        printClause(Kb.clauses[i]);
+        printf("and");
+        printClause(Kb.clauses[j]);
+        printf(".\n");
+      }
+    }
+  }
   printf("\n");
 }
 
