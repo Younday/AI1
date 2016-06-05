@@ -274,12 +274,30 @@ void resolution(clauseSet *kb) {
 
 void init(clauseSet *s) {
   clause c;
+  char i;
+  int j = 0;
+  char arr[10];
+  arr = malloc(10*sizeof(char));
   makeEmptyClauseSet(s);
-
-  while () {
-    
+  scanf("%c" , &i);
+  while (i != ' ') {
+    if (i == '[') {
+      while (i != ']') {
+      if ( i != '[') {
+        printf("asdfdaf\n");
+        printf("%d", i);
+        arr[j] = i;
+        j++;
+        }
+        scanf("%c", &i);
+      }
+      makeClause(&c, arr);
+      insertInClauseSet(c,s);
+      j = 0;
+      free(arr);
+    }
+    scanf("%c", &i);
   }
-
 
 
 
@@ -301,6 +319,9 @@ void init(clauseSet *s) {
 
 void recursivePrintProof(int idx, clauseSet s) {
 
+  printf("%d", idx);
+
+  printf("\n");
 }
 
 void printProof(clauseSet s) {
