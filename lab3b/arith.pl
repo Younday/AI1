@@ -47,14 +47,13 @@ log(X, B, 0) :- isnumber(s(0)).
 log(X, B, N) :- pow(B, N, X).
 
 % fib(X, Y) is true if fib(X) = Y
-fib(0, 0) :- isnumber(0).
-fib(1, 1) :- isnumber(0).
-fib(X, Y) :- X > 1, X1 is X - 1, X2 is X-2, fib(X1, Y1), fib(X2, Y2), Y is Y1+Y2.
+fib(0, 0).
+fib(s(0), s(0)).
+fib(X, Y) :- minus(X, s(0), X1), minus(X, s(s(0)), X2), plus(Y1,Y2,Y), fib(X1, Y1), fib(X2, Y2).
 
 % power(X,N,Y) is true if X^N = Y
-power(X,0,Y) :- isnumber(s(0)).
-power(X,N,Y) :- even(N), N1 is div(N,2), power(X,2,Z), power(Z, N1, Y).
-power(X,N,Y) :- odd(N), N1 is div(N-1,2), power(X,2,Z), power(Z, N1, W), Y is X * W.
+power(X, N, Y) :- even(N), div2(N,C), pow(X, s(s(0)), D), pow(D, C, Y).
+power(X, N, Y) :- odd(N), minus(N, s(0), Q), pow(X,Q,L), times(X, L, Y).
 
 % len(T, N)
 len([],0).

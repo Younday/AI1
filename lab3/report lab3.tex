@@ -296,12 +296,140 @@ Most of the constraints are quite logical, but we chose the value 1 for M, becau
 	\section{Logic}
 	\subsection*{Model checking in propositional logic}
 	
-	The inferred state is entailed, if it is true, regardless of what the knowledge-base is. So, to check if it is entailed, we have to check all the different truth-values, until we find one for which the inferred state evaluates to true. When this is the case, it is entailed, and we can stop searching. If not, we had to ensure that we do not infinitely keep searching, but stop after we've had all the options, so we implemented a counter, which had to be lower than the square of the number of variables, because that is the amount of options there are, since every variable can have only 2 truth-values. Next, the actual testing of the values is done. Since everything is bitwise, this too had to be done bitwise. For each variable, we check each value, and then move on to the next variable. This is done until all options have been, but the cycle is terminated when the inferred state is evaluated to true. Then, the function returns one. When the count is at the limit, the program shows the last model, which is of course an example of a configuration where it is not entailed, and then the function returns one. The random-model function is no longer used in the program, because it is replaced by this. 
+	\begin{lstlisting}
+	int checkAllModels(int modelSize) {
+		/* return 1 if KB entails INFER, otherwise 0 */
+		inferred = 0;
+		int i,j;
+		int cnt = 0;
+		while (cnt < pow(2,modelSize)) {
+			i = cnt;
+			j = 1;
+			while (i != 0) {
+				model[modelSize-j] = i%2;
+				i = i/2;
+				j++;
+			}
+			if (evaluateExpressionSet(inferSize, infer)) {
+				return inferred = 1;
+			}
+			cnt++;
+		}
+		showModel(modelSize);
+		return inferred;
+	}
+	\end{lstlisting}
+	
 	
 	\subsection*{Resolution in propositional logic}
+	\begin{lstlisting}
+	
+	\end{lstlisting}
 	
 	\subsection*{Prolog}
 	
+	\subsubsection*{Biblical family}
+	\begin{enumerate}
+	\item ?- grandfather(X, lot).
+	
+	X = terach .
+
+	\item ?- findall(X, (son(X,Y), son(Y, terach)), Z).
+	
+	Z = [isaac, lot].
+
+	\end{enumerate}
+	\subsubsection*{Arithmetic with natural numbers}
+	\begin{enumerate}
+	\item ?- plus(s(s(s(0))), s(s(0)), s(s(s(s(s(0)))))).
+	
+	true.
+	\item ?- plus(s(s(s(0))), s(s(0)), s(s(s(s(s(s(0))))))).
+	
+	false.
+	\item Even and odd
+	\begin{lstlisting}
+	% even(X) is true if X is even
+	even(0) :- isnumber(0).
+	even(s(s(X))) :- even(X).
+	
+	% odd(X) is true if X is odd
+	odd(s(0)) :- isnumber(s(0)).
+	odd(s(s(X))) :- odd(X).
+	\end{lstlisting}
+	\item Integer Division
+	\begin{lstlisting}
+	% div2(X,Y) is true if X div 2 is Y
+	div2(0, 0) :- isnumber(0).
+	div2(1, 0) :- isnumber(0).
+	div2(X, Y) :- plus(Y, Y, X), even(X).
+	div2(X, Y) :- plus(s(Y), Y, X), odd(X).
+	\end{lstlisting}
+	\item Integer Division with predicate times
+	\begin{lstlisting}
+	divi2(0, 0) :- isnumber(0).
+	divi2(1, 0) :- isnumber(0).
+	divi2(X, Y) :- even(X), times(s(s(0)), Y, X).
+	divi2(X, Y) :- odd(X), times(s(s(0)), Y, Z1), plus(s(0), Z1, X).
+	\end{lstlisting}
+	\item Log
+	\begin{lstlisting}
+	% log(X, B, N) is true if B ^ N = X
+	log(X, B, 0) :- isnumber(s(0)).
+	log(X, B, N) :- pow(B, N, X).
+	\end{lstlisting}
+	\item Fibonacci
+	\begin{lstlisting}
+	% fib(X, Y) is true if fib(X) = Y
+	fib(0, 0).
+	fib(s(0), s(0)).
+	fib(X, Y) :- minus(X, s(0), X1), minus(X, s(s(0)), X2), plus(Y1,Y2,Y), fib(X1, Y1), fib(X2, Y2).
+	\end{lstlisting}
+	\item Power
+	\begin{lstlisting}
+	% power(X,N,Y) is true if X^N = Y
+	power(X, N, Y) :- even(N), div2(N,C), pow(X, s(s(0)), D), pow(D, C, Y).
+	power(X, N, Y) :- odd(N), minus(N, s(0), Q), pow(X,Q,L), times(X, L, Y).
+	\end{lstlisting}
+	\end{enumerate}
+	
+	\subsubsection*{Lists}
+	\begin{lstlisting}
+	% member(X, L) is true if X is a member of list L
+	member(X, [X|_]).
+	member(X, [_|T]) :- member(X, T).
+	
+	% concat(L, X, Y) is true if L is the concatenation of the lists X and Y
+	concat(L, X, Y) :- append(X, Y, L).
+	
+	% reverse(L, R) is true if R is the reversal of L
+	reverse([], []).
+	reverse([H|T], R) :- reverse(T, RT), append(RT, [H], R).
+	
+	% palindrome(L) returns true if L is a palindrome.
+	palindrome(L) :- reverse(L, L).
+	\end{lstlisting}
+	\subsubsection*{Maze}
+	\begin{lstlisting}	
+	edge(a,b).
+	edge(b,f).
+	edge(f,e).
+	edge(f,j).
+	edge(j,k).
+	edge(k,g).
+	edge(g,c).
+	edge(c,d).
+	edge(d,h).
+	edge(h,l).
+	edge(l,p).
+	edge(i,m).
+	edge(m,n).
+	edge(n,o).
+	
+	path(X, Y) :- edge(X, Y).
+	path(X, Y) :- path(Z, Y), edge(X, Z).
+	\end{lstlisting}
+	When we ask the system: path(a,p), the system will return true. When we ask the system path(a,m), the system will run out of memory, which is not a surprising action, because there is not possible path from a to m.
 	\section{Appendix}
 	\subsection*{CSP's}
 	
@@ -655,34 +783,5 @@ Most of the constraints are quite logical, but we chose the value 1 for M, becau
 	
 	\end{itemize}
 	
-	\subsection*{Code}
-	\begin{itemize}
-	\item Check all models
-	\begin{lstlisting}
-	int checkAllModels(int modelSize) {
-	/* return 1 if KB entails INFER, otherwise 0 */
-	inferred = 0;
-	int i,j;
-	int cnt = 0;
-	while (cnt < pow(2,modelSize)) {
-	i = cnt;
-	j = 1;
-	while (i != 0) {
-	model[modelSize-j] = i%2;
-	i = i/2;
-	j++;
-	}
-	if (evaluateExpressionSet(inferSize, infer)) {
-	return inferred = 1;
-	}
-	cnt++;
-	}
-	showModel(modelSize);
-	return inferred;
-	}
-	\end{lstlisting}
-	
-	
-	\end{itemize}
 		
 \end{document}
