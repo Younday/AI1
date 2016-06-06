@@ -298,30 +298,27 @@ void init(clauseSet *s) {
   free(arr);
 }
 
-void recursivePrintProof(int idx, clauseSet s) {
-  clauseSet resolvents;
-  clauseSet Kb;
+void recursivePrintProof(int idx, clauseSet kb) {
   int i,j;
-  for (i=0; i < Kb.size; i++) {
+  for (i=0; i < kb.size; i++) {
     printf("blabla\n");
-    for (j=i+1; j < Kb.size; j++) {
-      resolveClauses(Kb.clauses[i], Kb.clauses[j], &resolvents);
+    for (j=i+1; j < kb.size; j++) {
+      clauseSet resolvents;
+      resolveClauses(kb.clauses[i], kb.clauses[j], &resolvents);
       printf("gaat nog goed\n");
-      printlnClause(resolvents.clauses[0]);
-      printlnClause(resolvents.clauses[1]);
-      if(areEqualClauses(resolvents.clauses[0], s.clauses[idx]) || areEqualClauses(resolvents.clauses[1], s.clauses[idx])) {
-        printClause(s.clauses[idx]);
+      if(areEqualClauses(resolvents.clauses[0], kb.clauses[idx]) || areEqualClauses(resolvents.clauses[1], kb.clauses[idx])) {
+        printClause(kb.clauses[idx]);
         printf("is inferred from");
-        printClause(Kb.clauses[i]);
+        printClause(kb.clauses[i]);
         printf(" and ");
-        printClause(Kb.clauses[j]);
+        printClause(kb.clauses[j]);
         printf(".\n");
+        recursivePrintProof(i,kb);
+        recursivePrintProof(j,kb);
       }
       freeClauseSet(resolvents);
     }
   }
-  recursivePrintProof(i, s);
-  recursivePrintProof(j,s);
   printf("\n");
 }
 
