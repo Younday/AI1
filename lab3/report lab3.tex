@@ -27,7 +27,7 @@
 	tabsize=3
 }
 
-\title{Artificial Intelligence 1 \\ Lab 2}%Update the lab (assignment number)
+\title{Artificial Intelligence 1 \\ Lab 3}%Update the lab (assignment number)
 \author{Roeland Lindhout (s2954524) \& Younes Moustaghfir (s2909758) \\ AI2/AI3} %Change the names and fill in the student numbers and the group name (AI1/AI2/CS1 etc)
 \date{\today}%Update the date
 
@@ -322,10 +322,66 @@ Most of the constraints are quite logical, but we chose the value 1 for M, becau
 	
 	
 	\subsection*{Resolution in propositional logic}
+	\begin{itemize}
+	\item Initialization function
 	\begin{lstlisting}
-	
+	void init(clauseSet *s) {
+		clause c;
+		char i;
+		int j = 0;
+		char *arr = malloc(20*sizeof(char));
+		makeEmptyClauseSet(s);
+		scanf("%c" , &i);
+		while (i != ' ') {
+			if (i == '[') {
+				while (i != ']') {
+					if ( i != '[') {
+						arr[j] = i;
+						j++;
+					}
+					scanf("%c", &i);
+				}
+				arr[j] = '\0';
+				makeClause(&c, arr);
+				insertInClauseSet(c,s);
+				j = 0;
+			}
+			scanf("%c", &i);
+		}
+		free(arr);
+	}
+		
 	\end{lstlisting}
 	
+	\item Proof Print\\
+	This piece of code does not work, but we did not manage to fix the problem that caused the segmentation fault.
+	\begin{lstlisting}
+	void recursivePrintProof(int idx, clauseSet kb) {
+		int i,j;
+		for (i=0; i < kb.size; i++) {
+			for (j=i+1; j < kb.size; j++) {
+			clauseSet resolvents;
+			resolveClauses(kb.clauses[i], kb.clauses[j], &resolvents);
+				if(areEqualClauses(resolvents.clauses[0], kb.clauses[idx]) || areEqualClauses(resolvents.clauses[1], kb.clauses[idx])) {
+					recursivePrintProof(i,kb);
+					recursivePrintProof(j,kb);
+					printClause(kb.clauses[idx]);
+					printf("is inferred from");
+					printClause(kb.clauses[i]);
+					printf(" and ");
+					printClause(kb.clauses[j]);
+					printf(".\n");
+				}
+				freeClauseSet(resolvents);
+			}
+		}
+		printf("\n");
+	}
+	\end{lstlisting}
+	
+	\item Proof \\
+	We could not find a good proof, because we did not manage to get the program to work correctly.
+	\end{itemize}
 	\subsection*{Prolog}
 	
 	\subsubsection*{Biblical family}
@@ -429,7 +485,7 @@ Most of the constraints are quite logical, but we chose the value 1 for M, becau
 	path(X, Y) :- edge(X, Y).
 	path(X, Y) :- path(Z, Y), edge(X, Z).
 	\end{lstlisting}
-	When we ask the system: path(a,p), the system will return true. When we ask the system path(a,m), the system will run out of memory, which is not a surprising action, because there is not possible path from a to m.
+	When we ask the system: path(a,p), the system will return true. When we ask the system path(a,m), the system will run out of memory, which is not a surprising action, because there is no possible path from a to m.
 	\section{Appendix}
 	\subsection*{CSP's}
 	

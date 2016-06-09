@@ -301,20 +301,18 @@ void init(clauseSet *s) {
 void recursivePrintProof(int idx, clauseSet kb) {
   int i,j;
   for (i=0; i < kb.size; i++) {
-    printf("blabla\n");
     for (j=i+1; j < kb.size; j++) {
       clauseSet resolvents;
       resolveClauses(kb.clauses[i], kb.clauses[j], &resolvents);
-      printf("gaat nog goed\n");
       if(areEqualClauses(resolvents.clauses[0], kb.clauses[idx]) || areEqualClauses(resolvents.clauses[1], kb.clauses[idx])) {
+        recursivePrintProof(i,kb);
+        recursivePrintProof(j,kb);
         printClause(kb.clauses[idx]);
         printf("is inferred from");
         printClause(kb.clauses[i]);
         printf(" and ");
         printClause(kb.clauses[j]);
         printf(".\n");
-        recursivePrintProof(i,kb);
-        recursivePrintProof(j,kb);
       }
       freeClauseSet(resolvents);
     }
